@@ -1,0 +1,10 @@
+.env
+.env.*
+!config/examples/env.example
+*.key
+*.pem
+secrets/
+.venv/
+__pycache__/
+node_modules/
+.DS_Store
