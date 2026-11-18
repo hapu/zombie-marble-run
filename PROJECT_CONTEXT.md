@@ -19,4 +19,4 @@ keep developing focusing on make a single page game
 - free of bugs, polished look and feel, some form of multiplayer
 
 ## Current state
-- Merging prototypes
+- Repo scaffolded for 5 prototypes: vanilla JS + canvas, Matter.js 0.20.0 vendored (MIT), static server, smoke test. No game code merged yet.

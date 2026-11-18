@@ -1,16 +1,26 @@
-# AI Workshop Template
+# Zombie Marble Run
 
-A starter repo for building with AI assistants from a phone and a low-power Chromebook. Read `WORKSHOP.md` for the full spec.
+A single-page browser game built by consolidating five prototype games. Vanilla JS, canvas, [Matter.js](https://brm.io/matter-js/) (MIT, vendored). No build step.
 
-## Use it
-1. On GitHub, click **Use this template → Create a new repository**.
-2. Fill in `PROJECT_CONTEXT.md` and `TODO.md`.
-3. Tell your AI assistant to read `AGENTS.md`, `PROJECT_CONTEXT.md`, and `HANDOFF.md` first.
+Read `PROJECT_CONTEXT.md` for the goal and `docs/ARCHITECTURE.md` for the structure.
 
-## Check context size
+## Run
 ```bash
-bash scripts/check-words.sh
+bash scripts/serve.sh        # http://localhost:8000/
 ```
+On a phone or another device, open this machine's LAN IP on the same port.
+
+## Check
+```bash
+bash scripts/check-words.sh   # context-file word budgets
+bash tests/smoke.sh           # page, engine, and bootstrap load
+```
+
+## Working with AI assistants
+Start by having the assistant read `AGENTS.md`, `PROJECT_CONTEXT.md`, and `HANDOFF.md`; follow `docs/WORKFLOW.md`.
+
+## Prototypes
+Incoming games live in `prototypes/<NN-name>/`; see `prototypes/README.md` for the rules.
 
 ## Keys
 Copy names from `config/examples/env.example` into your shell profile. Never commit real keys.

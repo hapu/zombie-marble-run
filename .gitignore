@@ -7,4 +7,8 @@ secrets/
 .venv/
 __pycache__/
 node_modules/
+dist/
+coverage/
+.cache/
+*.log
 .DS_Store
