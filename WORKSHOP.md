@@ -73,9 +73,9 @@ Free-tier APIs have tight input limits, so context files stay small. Use bullets
 
 ## 7. Workflow (details in `docs/WORKFLOW.md`)
 
-- **Start:** pull, read `AGENTS.md`, `PROJECT_CONTEXT.md`, `HANDOFF.md`, check branch and working tree, pick one task.
-- **During:** one small change at a time, run checks, update docs when behavior or decisions change.
-- **End:** summarize, record test results, update `HANDOFF.md`, commit, push.
+- **Start:** inspect branch and working tree, read `AGENTS.md`, `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, and `docs/WORKFLOW.md`, `git pull --rebase` only if clean, pick one task.
+- **During:** one small change at a time, run `bash scripts/check-words.sh` (and project checks as added), update docs when behavior or decisions change.
+- **End:** summarize, record check results, update `HANDOFF.md` (and `DEVELOPMENT_LOG.md` for notable changes/experiments), review `git diff`, commit and push only when explicitly asked.
 
 ## 8. Security (details in `docs/SECURITY.md`)
 

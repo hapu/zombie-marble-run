@@ -14,7 +14,7 @@
 
 ## End
 1. Summarize changes and check results.
-2. Update `HANDOFF.md` and `DEVELOPMENT_LOG.md`.
+2. Update `HANDOFF.md`, and update `DEVELOPMENT_LOG.md` for notable changes or experiments.
 3. Review `git diff`; commit and push only when explicitly asked, and never force-push.
 
 ## Roles when using several assistants
