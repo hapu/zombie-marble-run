@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1220">
+    <title>Blobs Marble Race</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #080e19;
+            color: #edf3fb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 38px 20px;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(52, 86, 137, 0.2), transparent 55%),
+                #080e19;
+        }
+
+        main {
+            width: min(100%, 980px);
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #7de2c2;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 3rem);
+            letter-spacing: -0.055em;
+        }
+
+        .intro {
+            margin: 10px 0 24px;
+            color: #9cabc0;
+            font-size: 0.98rem;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .controls,
+        .race-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        label,
+        #raceStatus {
+            color: #aab8ca;
+            font-size: 0.88rem;
+        }
+
+        select,
+        button,
+        input {
+            min-height: 42px;
+            border: 1px solid #2a3a52;
+            border-radius: 10px;
+            background: #121d2e;
+            color: #edf3fb;
+            font: inherit;
+        }
+
+        input {
+            min-width: 108px;
+            padding: 0 12px;
+        }
+
+        select {
+            padding: 0 34px 0 12px;
+        }
+
+        button {
+            padding: 0 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 750;
+            transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        button:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #7de2c2;
+            outline-offset: 3px;
+        }
+
+        #startButton {
+            border-color: #7de2c2;
+            background: #7de2c2;
+            color: #0c1a21;
+        }
+
+        #startButton:disabled {
+            cursor: wait;
+            opacity: 0.55;
+        }
+
+        #resetButton {
+            background: transparent;
+        }
+
+        .race-info {
+            justify-content: flex-end;
+            min-height: 25px;
+            margin-bottom: 8px;
+            text-align: right;
+        }
+
+        #winnerDisplay {
+            color: #ffd166;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .track-frame {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #25334a;
+            border-radius: 20px;
+            background: #0d1523;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .race-hud {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: min(92%, 560px);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .race-pill {
+            min-width: 54px;
+            border-radius: 10px;
+            background: rgba(7, 11, 18, 0.7);
+            border: 1px solid rgba(154, 167, 186, 0.55);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            padding: 4px 8px;
+            text-align: center;
+            color: #edf3fb;
+            font-size: 0.72rem;
+            line-height: 1.1;
+        }
+
+        .race-pill strong {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .timer-badge {
+            position: absolute;
+            left: 14px;
+            bottom: 12px;
+            z-index: 2;
+            background: rgba(11, 17, 28, 0.82);
+            border: 1px solid rgba(154, 167, 186, 0.5);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: #edf3fb;
+        }
+
+        .race-banner {
+            position: absolute;
+            left: 50%;
+            top: 45%;
+            transform: translate(-50%, -50%);
+            display: none;
+            max-width: min(92%, 520px);
+            min-width: min(60%, 240px);
+            background: rgba(10, 17, 28, 0.88);
+            border: 1px solid rgba(154, 167, 186, 0.6);
+            border-radius: 18px;
+            padding: 18px 20px;
+            text-align: center;
+            font-size: clamp(1.5rem, 3vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: #edf3fb;
+            z-index: 5;
+        }
+
+        .race-banner.result {
+            font-size: 1rem;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .race-banner.result h2 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .race-banner.result .result-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(154, 167, 186, 0.3);
+            padding: 6px 0;
+            gap: 12px;
+        }
+
+        .race-banner.result .swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+        }
+
+        .map-panel,
+        .debug-panel,
+        .toast {
+            position: absolute;
+            z-index: 4;
+            background: rgba(8, 13, 20, 0.88);
+            border: 1px solid rgba(154, 167, 186, 0.55);
+            border-radius: 14px;
+            color: #edf3fb;
+            backdrop-filter: blur(4px);
+        }
+
+        .map-panel {
+            right: 16px;
+            top: 16px;
+            display: none;
+            width: min(220px, calc(100% - 32px));
+            max-height: 240px;
+            overflow: auto;
+            padding: 10px;
+            font-size: 0.72rem;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .map-grid div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 24px;
+            border-radius: 6px;
+            background: rgba(72, 86, 106, 0.38);
+            font-size: 0.58rem;
+        }
+
+        .debug-panel {
+            right: 16px;
+            bottom: 16px;
+            display: none;
+            min-width: 170px;
+            padding: 8px 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.72rem;
+            line-height: 1.5;
+        }
+
+        .toast {
+            left: 50%;
+            bottom: 54px;
+            transform: translateX(-50%);
+            display: none;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .hint {
+            margin: 13px 2px 0;
+            color: #718198;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        @media (max-width: 620px) {
+            body {
+                padding: 26px 12px;
+            }
+
+            .toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .race-info {
+                justify-content: flex-start;
+                text-align: left;
+            }
+
+            label {
+                width: 100%;
+            }
+
+            .track-frame {
+                border-radius: 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <p class="eyebrow">Blobs Arcade</p>
+        <h1>Marble Race</h1>
+        <p class="intro">Race through a new seeded labyrinth every time. The camera follows the marble closest to the exit.</p>
+
+        <section class="toolbar" aria-label="Race controls">
+            <div class="controls">
+                <label for="marbleCount">Number of marbles</label>
+                <select id="marbleCount">
+                    <option value="4">4 racers</option>
+                    <option value="6" selected>6 racers</option>
+                    <option value="8">8 racers</option>
+                </select>
+                <input id="seedInput" type="text" placeholder="seed" maxlength="24" aria-label="Race seed" />
+                <button id="randomSeedButton" type="button" title="Random seed">🎲</button>
+                <button id="dailySeedButton" type="button" title="Daily seed">📅</button>
+                <button id="copyLinkButton" type="button" title="Copy race link">🔗</button>
+                <button id="mapButton" type="button" title="Track map">🗺</button>
+                <button id="debugButton" type="button" title="Debug overlay">🐞</button>
+                <button id="startButton" type="button">Start race</button>
+                <button id="resetButton" type="button">Reset</button>
+            </div>
+        </section>
+
+        <div class="race-info" aria-live="polite">
+            <span id="raceStatus">Ready at the starting line</span>
+            <span id="winnerDisplay"></span>
+        </div>
+
+        <div class="track-frame">
+            <div id="raceHud" class="race-hud" aria-live="polite"></div>
+            <div id="timerLabel" class="timer-badge">0.0s</div>
+            <div id="raceBanner" class="race-banner" aria-live="polite"></div>
+            <div id="mapPanel" class="map-panel" aria-live="polite"></div>
+            <div id="debugPanel" class="debug-panel" aria-live="polite"></div>
+            <div id="toast" class="toast" aria-live="polite"></div>
+            <canvas id="gameCanvas" width="900" height="660" aria-label="Procedurally generated marble maze race; camera follows the leader" role="img"></canvas>
+        </div>
+        <p class="hint">Find the winding route to the exit. The camera follows the marble furthest along the maze.</p>
+    </main>
+    <script src="./app.js"></script>
+</body>
+</html>

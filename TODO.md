@@ -7,9 +7,13 @@
   - [x] Add `prototypes/` and `assets/` placeholders
   - [x] Dev server and smoke test (`scripts/serve.sh`, `tests/smoke.sh`)
   - [x] Document structure, decisions, and run steps
+- [x] Analyse the prototypes (`prototypes/ANALYSIS.md`)
+  - [x] Decide the engine/base: Rapier2D (Option A), Matter.js (Option B), or React+Rapier (Option C) → Option A
+  - [x] Decide whether to commit prototypes and remove duplicates (`Three`, zip) and empty `Five` → trim and commit
 
 ## Next
-- [ ] Drop in prototype 1 under `prototypes/01-<name>/`
+- [ ] Swap the scaffold to vanilla + vendored Rapier2D 0.21 (replace Matter.js)
+- [ ] Set up the base game in `src/` from the Two/Three gameplay
 - [ ] Review prototypes and choose the shared physics/gameplay core
 - [ ] Define the single-page game loop and scene structure
 
