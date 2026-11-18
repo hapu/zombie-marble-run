@@ -21,7 +21,7 @@ check() {
 }
 
 check index.html 'id="game"'
-check vendor/matter.min.js 'matter-js'
-check src/main.js 'Engine.create'
+check vendor/rapier.mjs 'WebAssembly'
+check src/main.js 'new RAPIER.World'
 
 exit "$fail"

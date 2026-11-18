@@ -1,66 +1,102 @@
+import RAPIER from "../vendor/rapier.mjs";
+
 const canvas = document.getElementById("game");
 const status = document.getElementById("status");
+const ctx = canvas.getContext("2d");
 
-if (typeof window.Matter === "undefined") {
-  status.textContent = "Physics engine failed to load.";
-} else {
-  start();
+const PX_PER_M = 50;
+const FIXED_DT = 1 / 60;
+const GROUND_Y = 0;
+const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+let width = 0;
+let height = 0;
+let world = null;
+let ball = null;
+let accumulator = 0;
+let lastFrame = 0;
+
+function resize() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = Math.floor(width * dpr);
+  canvas.height = Math.floor(height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
-function start() {
-  const { Engine, Render, Runner, Bodies, Composite, Mouse, MouseConstraint } = window.Matter;
+function toScreen(x, y) {
+  return {
+    x: width / 2 + x * PX_PER_M,
+    y: height - 40 - (y - GROUND_Y) * PX_PER_M,
+  };
+}
 
-  const engine = Engine.create();
-  const render = Render.create({
-    canvas,
-    engine,
-    options: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      wireframes: false,
-      background: "#12121a",
-    },
-  });
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = "#12121a";
+  ctx.fillRect(0, 0, width, height);
 
-  const ground = Bodies.rectangle(
-    window.innerWidth / 2,
-    window.innerHeight - 30,
-    window.innerWidth,
-    60,
-    { isStatic: true, render: { fillStyle: "#2a2a3a" } },
+  const groundTop = toScreen(0, GROUND_Y + 0.5).y;
+  ctx.fillStyle = "#2a2a3a";
+  ctx.fillRect(0, groundTop, width, height - groundTop);
+
+  if (ball) {
+    const t = ball.translation();
+    const p = toScreen(t.x, t.y);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(ball.rotation());
+    ctx.fillStyle = "#4ade80";
+    ctx.beginPath();
+    ctx.arc(0, 0, 0.35 * PX_PER_M, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#0b3b22";
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0.35 * PX_PER_M, 0);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function frame(now) {
+  accumulator += Math.min((now - lastFrame) / 1000, 0.1);
+  lastFrame = now;
+  while (accumulator >= FIXED_DT) {
+    world.step();
+    accumulator -= FIXED_DT;
+  }
+  draw();
+  requestAnimationFrame(frame);
+}
+
+async function start() {
+  await RAPIER.init();
+  world = new RAPIER.World({ x: 0, y: -9.81 });
+
+  const ground = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, GROUND_Y));
+  world.createCollider(RAPIER.ColliderDesc.cuboid(50, 0.5), ground);
+
+  ball = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(0, 6));
+  world.createCollider(
+    RAPIER.ColliderDesc.ball(0.35).setRestitution(0.6).setFriction(0.4),
+    ball,
   );
-  const marble = Bodies.circle(window.innerWidth / 2, 80, 24, {
-    restitution: 0.7,
-    friction: 0.01,
-    render: { fillStyle: "#4ade80" },
+
+  canvas.addEventListener("pointerdown", () => {
+    ball.applyImpulse({ x: 0, y: 4 }, true);
   });
 
-  Composite.add(engine.world, [ground, marble]);
+  window.__game = { world, ball };
 
-  const mouse = Mouse.create(render.canvas);
-  const mouseConstraint = MouseConstraint.create(engine, {
-    mouse,
-    constraint: { stiffness: 0.2 },
-  });
-  Composite.add(engine.world, mouseConstraint);
-  render.mouse = mouse;
+  resize();
+  window.addEventListener("resize", resize);
+  lastFrame = performance.now();
+  requestAnimationFrame(frame);
 
-  Render.run(render);
-  Runner.run(Runner.create(), engine);
-
-  let groundWidth = window.innerWidth;
-  window.addEventListener("resize", () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    render.options.width = width;
-    render.options.height = height;
-    render.canvas.width = width;
-    render.canvas.height = height;
-    window.Matter.Body.scale(ground, width / groundWidth, 1);
-    window.Matter.Body.setPosition(ground, { x: width / 2, y: height - 30 });
-    groundWidth = width;
-  });
-
-  status.textContent = `matter-js ${window.Matter.version} ready`;
-  window.__game = { engine, render };
+  status.textContent = `rapier ${RAPIER.version()} ready`;
 }
+
+start().catch((error) => {
+  status.textContent = `Physics engine failed: ${error.message}`;
+});

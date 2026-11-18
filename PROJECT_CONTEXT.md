@@ -19,4 +19,4 @@ keep developing focusing on make a single page game
 - free of bugs, polished look and feel, some form of multiplayer
 
 ## Current state
-- Repo scaffolded for 5 prototypes: vanilla JS + canvas, Matter.js 0.20.0 vendored (MIT), static server, smoke test. No game code merged yet.
+- Repo scaffolded for 5 prototypes: vanilla JS + canvas, Rapier2D 0.21.0 vendored (Apache-2.0), static server, smoke test. Prototypes analyzed; no game code merged yet.
