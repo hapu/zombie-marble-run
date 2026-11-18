@@ -4,7 +4,7 @@ Instructions for AI coding agents. Keep under 500 words.
 
 ## Before changing anything
 1. Inspect the repo and working tree.
-2. Read `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, and `WORKSHOP.md` if relevant.
+2. Read `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, `docs/WORKFLOW.md`, and `WORKSHOP.md` if relevant.
 3. Identify existing work to preserve.
 4. Verify provider and tool facts from official sources if they may have changed.
 5. Explain the plan briefly before any large restructuring.

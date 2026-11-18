@@ -1,21 +1,21 @@
 # Workflow
 
 ## Start
-1. `git pull --rebase`
-2. Read `AGENTS.md`, `PROJECT_CONTEXT.md`, `HANDOFF.md`.
-3. Check branch and working tree.
+1. Inspect the repo and working tree (`git status --short --branch`, `git log --oneline -5`).
+2. Read `AGENTS.md`, `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, and this file.
+3. If the working tree is clean, `git pull --rebase`. If dirty, branch or stash first — never pull over uncommitted work.
 4. Pick one task from `TODO.md`.
 
 ## During
 1. One coherent change at a time, small enough to review.
-2. Run relevant checks.
+2. Run `bash scripts/check-words.sh` after doc edits (add project-specific check commands here as they appear).
 3. Update docs when behavior, setup, or decisions change.
 4. Never overwrite another device's uncommitted work. Use separate branches or worktrees for simultaneous changes.
 
 ## End
-1. Summarize changes and test results.
+1. Summarize changes and check results.
 2. Update `HANDOFF.md` and `DEVELOPMENT_LOG.md`.
-3. Commit and push.
+3. Review `git diff`; commit and push only when explicitly asked, and never force-push.
 
 ## Roles when using several assistants
 | Role | Job |
