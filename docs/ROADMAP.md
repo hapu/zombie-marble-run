@@ -2,12 +2,12 @@
 
 ## Phase 1: Foundation
 - [ ] Create the template repo and mark it as a template on GitHub
-- [ ] Establish branch and commit workflow
+- [x] Establish branch and commit workflow
 - [ ] Set up the Chromebook environment
 - [ ] Set up Android access (e.g. Termux + SSH)
 
 ## Phase 2: Provider inventory
-- [ ] Fill in `docs/PROVIDERS.md` with verified limits and dates
+- [x] Fill in `docs/PROVIDERS.md` with verified limits and dates
 
 ## Phase 3: Coding agent
 - [ ] Install and test OpenCode (or another agent) with one provider

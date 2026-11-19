@@ -1,6 +1,6 @@
 # Zombie Marble Run
 
-A single-page browser game built by consolidating five prototype games. Vanilla JS, canvas, [Rapier2D](https://rapier.rs/) (Apache-2.0, vendored). No build step.
+A single-page browser game built by consolidating six prototype games. Vanilla JS, canvas, [Rapier2D](https://rapier.rs/) (Apache-2.0, vendored). No build step.
 
 Read `PROJECT_CONTEXT.md` for the goal and `docs/ARCHITECTURE.md` for the structure.
 
@@ -20,7 +20,7 @@ bash tests/smoke.sh           # page, engine, and bootstrap load
 Start by having the assistant read `AGENTS.md`, `PROJECT_CONTEXT.md`, and `HANDOFF.md`; follow `docs/WORKFLOW.md`.
 
 ## Prototypes
-Incoming games live in `prototypes/<NN-name>/`; see `prototypes/README.md` for the rules.
+Incoming games live in `prototypes/<Name>/`; see `prototypes/README.md` for the rules.
 
 ## Keys
 Copy names from `config/examples/env.example` into your shell profile. Never commit real keys.

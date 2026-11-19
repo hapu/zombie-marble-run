@@ -1,6 +1,6 @@
 # Prototype analysis
 
-Analysed 2026-11-17. All folders are untracked and were reviewed in place; nothing was moved or deleted.
+Reviewed in place on 2026-11-17; duplicates (`Three/`, zip) and empty `Five/` were removed, and the remaining six prototypes were committed (`2f620bf`).
 
 ## Inventory
 

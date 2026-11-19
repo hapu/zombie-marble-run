@@ -13,8 +13,8 @@
 
 ## Next
 - [x] Swap the scaffold to vanilla + vendored Rapier2D 0.21 (replace Matter.js)
-- [ ] Set up the base game in `src/` from the Two/Three gameplay
-- [ ] Review prototypes and choose the shared physics/gameplay core
+- [x] Review prototypes and choose the shared physics/gameplay core
+- [ ] Set up the base game in `src/` from the `Two` gameplay
 - [ ] Define the single-page game loop and scene structure
 
 ## Later
