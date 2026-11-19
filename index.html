@@ -12,11 +12,53 @@
         position: fixed; left: 8px; bottom: 6px; margin: 0;
         font: 12px/1.2 system-ui, sans-serif; color: #8b8ba7; pointer-events: none;
       }
+      #hud {
+        position: fixed; top: 8px; left: 8px; right: 8px;
+        display: flex; gap: 8px; justify-content: space-between;
+        pointer-events: none;
+      }
+      .pill {
+        background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3);
+        border-radius: 999px; padding: 4px 10px; font: 12px/1.2 system-ui, sans-serif;
+        color: #f3f6ff; pointer-events: auto; cursor: pointer;
+      }
+      .pill.active { background: #4ade80; color: #0b3b22; font-weight: 700; }
+      .pill:disabled { opacity: .5; cursor: not-allowed; }
+      .pill-group { display: flex; gap: 6px; pointer-events: auto; }
+      button.pill { font-family: inherit; }
+      #overlay {
+        position: fixed; inset: 0; background: rgba(18,18,26,.85);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 10; color: #fff; text-align: center; pointer-events: auto;
+      }
+      #overlay h1 { font: 48px/1 system-ui, sans-serif; margin: 0 0 8px; }
+      #overlay p { font: 14px/1.4 system-ui, sans-serif; margin: 0 0 16px; color: #b8c7df; }
+      #overlay button {
+        font: 16px/1 system-ui, sans-serif; padding: 10px 24px; border-radius: 8px;
+        border: none; background: #4ade80; color: #0b3b22; font-weight: 700; cursor: pointer;
+      }
+      #overlay button:hover { background: #6ee7b7; }
+      .hidden { display: none !important; }
     </style>
   </head>
   <body>
     <canvas id="game"></canvas>
-    <p id="status">loading...</p>
+    <p id="status">loading…</p>
+    <div id="hud" class="hidden">
+      <div id="zombies" class="pill">🧟 0</div>
+      <div id="time" class="pill">0.0s</div>
+      <div id="abilities" class="pill-group">
+        <button id="btnBoost" class="pill">1 ⚡ Boost</button>
+        <button id="btnShield" class="pill">2 🛡 Shield</button>
+        <button id="btnHeal" class="pill">3 ✚ Heal</button>
+      </div>
+    </div>
+    <div id="overlay">
+      <h1>Zombie Marble Run</h1>
+      <p>A marble survival game — survive the zombie outbreak.</p>
+      <button id="btnStart">▶ Play</button>
+      <p style="margin-top:12px;font-size:11px;color:#8b8ba7">SPACE to start · 1/2/3 abilities · R to restart</p>
+    </div>
     <script type="module" src="src/main.js"></script>
   </body>
 </html>

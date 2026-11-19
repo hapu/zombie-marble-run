@@ -1,102 +1,203 @@
 import RAPIER from "../vendor/rapier.mjs";
+import { makeWorld } from "./world.js";
+import {
+  spawnMarbles, spawnZombies, stepSim, checkCollisions,
+} from "./entities.js";
+import {
+  combatStep, useAbility, updateAbilityTarget,
+} from "./combat.js";
+import {
+  draw, resize,
+} from "./render.js";
+import { setupInput } from "./input.js";
 
 const canvas = document.getElementById("game");
 const status = document.getElementById("status");
 const ctx = canvas.getContext("2d");
+const overlay = document.getElementById("overlay");
+const btnStart = document.getElementById("btnStart");
+const hud = document.getElementById("hud");
+const zombiesEl = document.getElementById("zombies");
+const timeEl = document.getElementById("time");
+const btnBoost = document.getElementById("btnBoost");
+const btnShield = document.getElementById("btnShield");
+const btnHeal = document.getElementById("btnHeal");
 
 const PX_PER_M = 50;
 const FIXED_DT = 1 / 60;
 const GROUND_Y = 0;
+
 const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
 let width = 0;
 let height = 0;
 let world = null;
-let ball = null;
+let S = null;
 let accumulator = 0;
 let lastFrame = 0;
+let state = "ready"; // ready | countdown | racing | done
+let simT = 0;
+let countdownId = null;
 
-function resize() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-
-function toScreen(x, y) {
-  return {
-    x: width / 2 + x * PX_PER_M,
-    y: height - 40 - (y - GROUND_Y) * PX_PER_M,
-  };
-}
-
-function draw() {
-  ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#12121a";
-  ctx.fillRect(0, 0, width, height);
-
-  const groundTop = toScreen(0, GROUND_Y + 0.5).y;
-  ctx.fillStyle = "#2a2a3a";
-  ctx.fillRect(0, groundTop, width, height - groundTop);
-
-  if (ball) {
-    const t = ball.translation();
-    const p = toScreen(t.x, t.y);
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(ball.rotation());
-    ctx.fillStyle = "#4ade80";
-    ctx.beginPath();
-    ctx.arc(0, 0, 0.35 * PX_PER_M, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#0b3b22";
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0.35 * PX_PER_M, 0);
-    ctx.stroke();
-    ctx.restore();
+function startGame() {
+  try {
+    if (state !== "ready") return;
+    overlay.classList.add("hidden");
+    hud.classList.remove("hidden");
+    state = "countdown";
+    let c = 3;
+    status.textContent = c;
+    countdownId = setInterval(() => {
+      try {
+        c--;
+        if (c > 0) status.textContent = c;
+        else {
+          clearInterval(countdownId);
+          countdownId = null;
+          status.textContent = "";
+          state = "racing";
+          simT = 0;
+          accumulator = 0;
+          S = makeWorld(world, 30, "seed", { diff: "normal" });
+          spawnMarbles(world, S);
+          spawnZombies(world, S);
+          lastFrame = performance.now();
+        }
+      } catch (err) {
+        clearInterval(countdownId);
+        countdownId = null;
+        console.error("startGame error:", err);
+        disposeSession();
+        S = null;
+        state = "ready";
+        overlay.classList.remove("hidden");
+        hud.classList.add("hidden");
+        status.textContent = `Start failed: ${err.message}`;
+      }
+    }, 700);
+  } catch (err) {
+    console.error("startGame error:", err);
+    disposeSession();
+    S = null;
+    state = "ready";
+    overlay.classList.remove("hidden");
+    hud.classList.add("hidden");
+    status.textContent = `Start failed: ${err.message}`;
   }
+}
+
+function disposeSession() {
+  if (!S || !world) return;
+  const seen = new Set();
+  const bodies = [
+    ...S.statics.map(b => b && b.rb),
+    ...S.marbles.map(m => m && m.rb),
+    ...S.zombies.map(m => m && m.rb),
+    S.gate && S.gate.rb,
+    S.zgate && S.zgate.rb,
+  ];
+  for (const rb of bodies) {
+    if (!rb || seen.has(rb)) continue;
+    seen.add(rb);
+    try { world.removeRigidBody(rb); } catch { /* already removed */ }
+  }
+}
+
+function resetGame() {
+  try {
+    if (countdownId !== null) {
+      clearInterval(countdownId);
+      countdownId = null;
+    }
+    disposeSession();
+    S = null;
+    state = "ready";
+    simT = 0;
+    accumulator = 0;
+    overlay.classList.remove("hidden");
+    hud.classList.add("hidden");
+    status.textContent = "rapier ready - click or SPACE to start";
+  } catch (err) {
+    console.error("resetGame error:", err);
+  }
+}
+
+async function initPhysics() {
+  await RAPIER.init();
+  world = new RAPIER.World({ x: 0, y: 9.81 });
+  world.timestep = FIXED_DT;
+
+  const ground = world.createRigidBody(
+    RAPIER.RigidBodyDesc.fixed().setTranslation(0, GROUND_Y),
+  );
+  world.createCollider(RAPIER.ColliderDesc.cuboid(50, 0.5), ground);
+
+  window.__game = { world };
+
+  const { width: w, height: h } = resize(canvas, dpr);
+  width = w;
+  height = h;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  window.addEventListener("resize", () => {
+    const { width: w2, height: h2 } = resize(canvas, dpr);
+    width = w2;
+    height = h2;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  });
+
+  status.textContent = `rapier ${RAPIER.version ? RAPIER.version() : "unknown"} ready`;
+  setupInput(canvas, {
+    startGame,
+    resetGame,
+    useBoost: () => S && useAbility(S, "boost"),
+    useShield: () => S && useAbility(S, "shield"),
+    useHeal: () => S && useAbility(S, "heal"),
+  });
+  btnBoost.addEventListener("click", () => S && useAbility(S, "boost"));
+  btnShield.addEventListener("click", () => S && useAbility(S, "shield"));
+  btnHeal.addEventListener("click", () => S && useAbility(S, "heal"));
+  btnStart.addEventListener("click", startGame);
+
+  lastFrame = performance.now();
+  requestAnimationFrame(frame);
 }
 
 function frame(now) {
   accumulator += Math.min((now - lastFrame) / 1000, 0.1);
   lastFrame = now;
-  while (accumulator >= FIXED_DT) {
-    world.step();
-    accumulator -= FIXED_DT;
+
+  try {
+    if (state === "racing" && S) {
+      while (accumulator >= FIXED_DT) {
+        simT += FIXED_DT;
+        stepSim(world, S, FIXED_DT);
+        world.step();
+        combatStep(S, FIXED_DT);
+        checkCollisions(world, S);
+        updateAbilityTarget(S);
+        accumulator -= FIXED_DT;
+      }
+      if (S && S.gameOver) state = "done";
+    }
+
+    draw(ctx, S, state, simT, width, height, PX_PER_M);
+
+    if (state === "racing" && S) {
+      const zCount = S.marbles.filter(m => m.zombie && !m.gone).length;
+      zombiesEl.textContent = `🧟 ${zCount}`;
+      timeEl.textContent = `${simT.toFixed(1)}s`;
+    }
+  } catch (err) {
+    console.error("frame error:", err);
+    status.textContent = `Game error: ${err.message}`;
   }
-  draw();
+
   requestAnimationFrame(frame);
 }
 
-async function start() {
-  await RAPIER.init();
-  world = new RAPIER.World({ x: 0, y: -9.81 });
-
-  const ground = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, GROUND_Y));
-  world.createCollider(RAPIER.ColliderDesc.cuboid(50, 0.5), ground);
-
-  ball = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(0, 6));
-  world.createCollider(
-    RAPIER.ColliderDesc.ball(0.35).setRestitution(0.6).setFriction(0.4),
-    ball,
-  );
-
-  canvas.addEventListener("pointerdown", () => {
-    ball.applyImpulse({ x: 0, y: 4 }, true);
-  });
-
-  window.__game = { world, ball };
-
-  resize();
-  window.addEventListener("resize", resize);
-  lastFrame = performance.now();
-  requestAnimationFrame(frame);
-
-  status.textContent = `rapier ${RAPIER.version()} ready`;
-}
-
-start().catch((error) => {
+initPhysics().catch((error) => {
+  console.error("initPhysics error:", error);
   status.textContent = `Physics engine failed: ${error.message}`;
+  // Still attach button so user can retry
+  btnStart.addEventListener("click", startGame);
 });
