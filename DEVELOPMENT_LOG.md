@@ -2,6 +2,12 @@
 
 Newest first. Archive old entries once this passes 3,000 words.
 
+## 2026-11-20
+- Change or experiment: Compared the live `src/` game with all six retained prototypes; expanded `prototypes/ANALYSIS.md` with each prototype's implemented features and a prioritized porting list.
+- Result: The current race/combat/ability core and major missing candidates are documented; confirmed no retained prototype implements networked multiplayer. `bash scripts/check-words.sh && bash tests/smoke.sh` (to run).
+- Change or experiment: Converted the analysis's high- and medium-priority prototype recommendations into actionable `TODO.md` items.
+- Result: Recommended ports are ordered by priority, including determinism/configuration, course content, race feedback, combat presentation, mobile/audio, and testing.
+
 ## 2026-11-19
 - Change or experiment: Synced the variant's ammo removal, rebalanced weapons, HP/weapon rendering, and per-weapon FX into `Zombie Marble Run.html`, leaving weapon cooldowns as the only difference, and updated the Six README, variant analysis, prototype inventory, and handoff to match.
 - Result: Both Six files are 612 lines and differ by one line; `bash scripts/check-words.sh` passes.

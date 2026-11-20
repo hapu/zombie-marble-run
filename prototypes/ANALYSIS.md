@@ -25,6 +25,32 @@ License check (npm registry): Rapier2D Apache-2.0, Matter.js MIT, React/Vite MIT
 6. **Duplicates resolved.** `Three` duplicated `Two`, the zip duplicated `Eight`, and `Five` was empty; all three were removed on 2026-11-17 with approval.
 7. **Offline/weight trade-offs.** Single-file prototypes load physics from CDNs (offline risk); React projects need npm/bun and Vite (Node weight on a 4 GB Chromebook), though their built output is static.
 
+## Implemented feature inventory
+
+| Prototype | Implemented features |
+| :--- | :--- |
+| `One` | Seeded 10x15 maze race; 4/6/8 racers; manual/random/daily/share seeds; countdown, progress/finish HUD and results; leader-follow camera; route map; debug overlay and toasts. Pure race with custom steering/collision physics; no combat. |
+| `Two` | 15 marbles and a 5x5, 25-family/five-variant course; walkers, runners, tanks and bosses; five auto-fire weapons, HP, damage/infection, ammo/reload and crates; Boost/Shield/Heal; difficulty, seed/share/daily controls, touch selection, speed, mute, help, map, results, highlight replay, fullscreen fallback, and live timing/physics profiler with CDN fallbacks and load errors. |
+| `Four` | Seeded 5x5 race with deterministic gameplay RNG; 14 selectable/renameable marble types and patient-zero setting; seven weapons, four zombie types, combat and crates; targeted and commander-map powers; four camera modes, speed controls, standings/follow, map, debug, highlight replay, pause/restart/results, responsive portrait/landscape and fullscreen, Spanish UI, WebAudio, plus tests and performance benchmarks. |
+| `Six` | 5x5 course with 25 chunk families and five variants, including obstacle/hazard families, climb/drop/lift routes and bosses; five weapons with unlimited ammo, visible weapons, segmented HP rings and weapon-specific effects; combat, infection, pickups, prediction points/streaks, local stats and optional host leaderboard; seed/daily controls, map, help, pause/rematch, replay/results, sound, debug and adaptive quality. The two files differ only in cooldown tuning. |
+| `Seven` | Single-file Rapier version of the zombie race: 15 marbles, seeded 5x5 course, four zombie types, five weapons, HP/infection/crates, difficulty presets, three abilities, follow/cycle selection, seed controls, speed, sound, help, map, debug, fullscreen fallback, highlight replay and results. Its distinguishing strength is compact, self-contained gameplay reference; it is not a separate feature family from `Two`. |
+| `Eight` | Four's broader race feature set plus five camera modes (including smart camera), four speed settings, pause-first settings/minimal HUD, health disks, survivor list, 240 Hz simulation, and Presentation API sender/TV receiver mode with seed sync/theater bar. Expanded audio and Spanish UI. Gemini/Express declarations are not implemented runtime features. |
+
+Across the zombie prototypes, seeds generally determine course layout but not every gameplay roll; `Four` is the strongest deterministic implementation. None implements networked multiplayer. Six's optional hosted leaderboard requires its host API and is not multiplayer.
+
+## What the live game has, and what to bring over
+
+The current vanilla/Rapier `src/` implements the basic loop: 15 colored marbles, a fixed 5x5 snake route with belts, 30 zombies, five weapons with ammo/reload, HP and infection, Boost/Shield/Heal, a fixed 60 Hz step, a leading-human camera, basic HP bars, and a minimal start/HUD/restart interface. It does **not** yet expose most of those controls in a full settings flow, nor does it have playable chunk obstacles. `world.js` explicitly notes that lift/wind content is unported. The current seed and zombie/event randomness are also not fully reproducible.
+
+Recommended port order:
+
+1. **Make races configurable and reproducible.** Bring over Four's shared seeded RNG and seed/hash/daily/share controls, participant selection, patient-zero/difficulty settings, and per-race reset discipline. Keep the current lightweight vanilla UI and Rapier 0.21 engine; do not transplant React or a prototype's Rapier/Matter bridge.
+2. **Restore course variety and route content.** Port selected Six/Four obstacle and hazard families, then pickups/crates and climb/drop/lift/wind routes. Start with a small balanced set and test physics at the chosen scale/tick rate before bringing over the full 125 chunk variants.
+3. **Finish useful in-race feedback.** Add follow/cycle marble selection, map, standings, finish order/results, pause/rematch, and mobile-safe controls. The map and results are substantial, directly reusable gameplay affordances; prediction scoring/streaks are optional rather than core.
+4. **Improve combat presentation and tuning.** Consider Six's unlimited-ammo balance, visible equipped weapons, segmented HP rings, per-weapon effects, and retained aim. Decide ammo policy deliberately; current source uses finite clips and reloads.
+5. **Add quality-of-life systems.** Bring over WebAudio, replay/highlights, responsive portrait/landscape and fullscreen, then a lightweight debug/performance overlay. Prefer Four's reproducible tests/benchmarks over Two's broader in-game profiler for regression checking.
+6. **Defer high-cost/optional features.** Eight's Chromecast/Presentation API mode is specialized; Six's host-dependent leaderboard is not portable; multiplayer is a separate design task because no prototype supplies networking.
+
 ## Fit with project constraints
 
 - 4 GB Chromebook / phone: single-file games run directly; React builds are heavier at dev time.
