@@ -1,6 +1,8 @@
 // Combat: weapon auto-fire and player abilities (boost/shield/heal).
 // Ported from prototype Two's combat / ability logic.
 
+import { HP, TEAMS } from "./gameConfig.js";
+
 let abilityTarget = null;
 let abilityBoostUntil = 0;
 let abilityShieldUntil = 0;
@@ -11,8 +13,6 @@ let abilityHealReady = 0;
 export function abilityStateTarget() { return abilityTarget; }
 export function abilityStateBoostUntil() { return abilityBoostUntil; }
 export function abilityStateShieldUntil() { return abilityShieldUntil; }
-
-const HP = 5;
 
 // Auto-fire weapons for human marbles against nearby zombies.
 export function combatStep(S, dt) {
@@ -97,10 +97,3 @@ export function updateAbilityTarget(S) {
   abilityTarget = humansList[0];
 }
 
-const TEAMS = [
-  { n: "Red", c: "#ff2d2d" }, { n: "Green", c: "#1fcf3a" }, { n: "Blue", c: "#2f5bff" },
-  { n: "Yellow", c: "#ffe81f" }, { n: "Cyan", c: "#00e5ff" }, { n: "Magenta", c: "#ff2bd6" },
-  { n: "Orange", c: "#ff8a00" }, { n: "Chartreuse", c: "#8cff00" }, { n: "Spring Green", c: "#00ff7f" },
-  { n: "Azure", c: "#0a8cff" }, { n: "Violet", c: "#8b3dff" }, { n: "Rose", c: "#ff2d7f" },
-  { n: "Black", c: "#111111" }, { n: "Grey", c: "#8a8a8a" }, { n: "White", c: "#ffffff" },
-];

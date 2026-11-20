@@ -18,7 +18,7 @@ License check (npm registry): Rapier2D Apache-2.0, Matter.js MIT, React/Vite MIT
 ## Findings
 
 1. **Two clusters.** Single-file HTML games (`One`, `Two`, `Three`, `Six`, `Seven`) with no build, and React + TypeScript + Vite projects (`Four`, `Eight`).
-2. **Physics split.** Rapier2D in `Two`/`Three`, `Seven`, `Four`, `Eight`; Matter.js only in `Six`; `One` has a hand-written physics loop. The current scaffold uses Matter.js 0.20, so it matches only `Six`.
+2. **Physics split.** Rapier2D in `Two`/`Three`, `Seven`, `Four`, `Eight`; Matter.js only in `Six`; `One` has a hand-written physics loop. The current shared implementation uses vendored Rapier2D 0.21.0.
 3. **Feature overlap.** The zombie-run cluster (weapons, bosses, shields, boosts, replay, local leaderboard) appears in Two/Three, Six, Seven, Four, Eight. `One` is a pure marble-maze race with no combat.
 4. **Determinism.** `One` and `Four` use seeds; `Four` ships end-to-end reproducibility tests and benchmarks.
 5. **No multiplayer anywhere.** Networking appears in none of the prototypes, yet `PROJECT_CONTEXT.md` lists multiplayer in the definition of done.
@@ -32,10 +32,10 @@ License check (npm registry): Rapier2D Apache-2.0, Matter.js MIT, React/Vite MIT
 - No 3D: all prototypes are 2D.
 - Single page: single-file prototypes already are; React builds produce an SPA.
 
-## Recommendation (needs a decision)
+## Decision
 
-- **Option A — Vanilla + Rapier2D single page (base: Two/Three, upgrade Rapier to 0.21):** matches most prototypes, no build step, can vendor the engine for offline use. Would revise the current Matter.js decision.
-- **Option B — Vanilla + Matter.js (base: Six):** matches the current scaffold with the least change, but diverges from most prototypes.
+- **Option A — Vanilla + Rapier2D single page (base: Two/Three, upgrade Rapier to 0.21):** matches most prototypes, no build step, and can vendor the engine for offline use.
+- **Option B — Vanilla + Matter.js (base: Six):** matches the former scaffold with the least change, but diverges from most prototypes.
 - **Option C — React + TS + Vite + Rapier (Four/Eight):** richest code and tests, but adds a Node build and larger maintenance surface on low-power devices.
 
 Recommended and **chosen on 2026-11-17: Option A** for engine parity and no build step, keeping `Four`/`Eight` as reference donors (determinism tests, power system, split renderer).

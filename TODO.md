@@ -1,7 +1,7 @@
 # TODO
 
 ## Now
-- [x] Prepare the repo to receive the code of 5 prototypes
+- [x] Prepare the repo to receive the code of 6 prototypes
   - [x] Single-page entry (`index.html`) and bootstrap (`src/main.js`)
   - [x] Vendor Rapier2D 0.21.0 with license (`vendor/`)
   - [x] Add `prototypes/` and `assets/` placeholders
@@ -16,6 +16,10 @@
 - [x] Review prototypes and choose the shared physics/gameplay core
 - [x] Set up the base game in `src/` from the `Two` gameplay
 - [x] Define the single-page game loop and scene structure
+- [ ] Refine physics dimensions, weight, and distances to reflect real-life marbles
+  - [ ] Establish a real-world scale, such as standard marble dimensions and mass
+  - [ ] Convert chunk, obstacle, weapon, zombie, and race distances consistently
+  - [ ] Rebalance velocity, gravity, forces, friction, and restitution at that scale
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
 

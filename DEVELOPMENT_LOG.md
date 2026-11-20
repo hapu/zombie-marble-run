@@ -2,6 +2,14 @@
 
 Newest first. Archive old entries once this passes 3,000 words.
 
+## 2026-11-20
+- Change or experiment: Separated shared game constants from physics and renderer dependencies, and added `scripts/build-offline.py` to inline the module graph and vendored Rapier engine into `dist/zombie-marble-run.html`.
+- Result: Offline build succeeds at roughly 3.3 MB; the smoke test now verifies that the generated HTML contains the bundled Rapier object and no module imports.
+
+## 2026-11-20
+- Change or experiment: Reconciled project documentation with the current Rapier2D implementation and identified the source files intended for direct user editing.
+- Result: README now distinguishes live-game files from vendor, tooling, and prototype-reference directories; stale Matter.js-era layout text was removed, and project context, handoff, and prototype analysis were aligned with the current Two-based port.
+
 ## 2026-11-18
 - Change or experiment: Verified and filled the provider table in `docs/PROVIDERS.md` from official pages (Google, Groq, Cerebras, Mistral, NVIDIA, Cloudflare, Hugging Face, OpenRouter).
 - Result: `scripts/check-words.sh` passes. Recorded Mistral's docs conflict and NVIDIA's unstated limits rather than guessing.

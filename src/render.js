@@ -1,7 +1,7 @@
 // Canvas rendering with camera follow.
 // Ported from prototype Two's draw() logic.
 
-import { CS, ROWS, COLS, HP, R, ZT, TEAMS, WEAPONS } from "./world.js";
+import { CS, HP, R, ZT, TEAMS } from "./gameConfig.js";
 
 let cam = { x: 180, y: 200 };
 let zoom = 1;

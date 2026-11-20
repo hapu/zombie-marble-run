@@ -24,4 +24,13 @@ check index.html 'id="game"'
 check vendor/rapier.mjs 'WebAssembly'
 check src/main.js 'new RAPIER.World'
 
+python3 scripts/build-offline.py >/tmp/zombie-build.log
+check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
+if ! grep -q 'type="module"' dist/zombie-marble-run.html; then
+  echo "ok    dist/zombie-marble-run.html (no module imports)"
+else
+  echo "FAIL  dist/zombie-marble-run.html (contains module imports)"
+  fail=1
+fi
+
 exit "$fail"

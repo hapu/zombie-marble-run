@@ -1,7 +1,8 @@
 // Entity management: marbles, zombies, physics stepping.
 // Ported from prototype Two's makeWorld S.mk / stepSim logic.
 
-import { CS, ROWS, COLS, HP, R, ZT, TEAMS, WEAPONS, circ, O } from "./world.js";
+import { CS, HP, R, ZT, TEAMS, WEAPONS } from "./gameConfig.js";
+import { circ, O } from "./world.js";
 import { abilityStateTarget, abilityStateBoostUntil, abilityStateShieldUntil } from "./combat.js";
 
 const VMAX = 190;
