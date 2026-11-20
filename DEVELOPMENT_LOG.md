@@ -3,6 +3,10 @@
 Newest first. Archive old entries once this passes 3,000 words.
 
 ## 2026-11-19
+- Change or experiment: Audited docs against the tracked Six variant and current modules; added `src/input.js` to the architecture and corrected the stale placeholder-marble/pointer-impulse description, clarified README build wording, added the variant to the prototype inventory, and refreshed the handoff.
+- Result: Documentation matches the current files; `bash scripts/check-words.sh` passes.
+
+## 2026-11-19
 - Change or experiment: Reconciled the handoff and Six docs with the now-tracked `marble-race.html`, merged the overlapping physics-scale and audit tasks in `TODO.md`, and hardened `tests/smoke.sh` to pick a free port and poll for readiness instead of using port 8123 and a fixed sleep.
 - Result: `bash scripts/check-words.sh && bash tests/smoke.sh` pass; smoke tests no longer depend on a specific port or startup timing.
 

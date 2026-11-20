@@ -1,6 +1,6 @@
 # Zombie Marble Run
 
-A single-page browser game built by consolidating six prototype games. Vanilla JS, canvas, [Rapier2D](https://rapier.rs/) (Apache-2.0, vendored). No build step.
+A single-page browser game built by consolidating six prototype games. Vanilla JS, canvas, [Rapier2D](https://rapier.rs/) (Apache-2.0, vendored). No build step required.
 
 Read `PROJECT_CONTEXT.md` for the goal and `docs/ARCHITECTURE.md` for the structure.
 

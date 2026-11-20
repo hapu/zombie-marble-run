@@ -9,7 +9,7 @@ Reviewed in place on 2026-11-17; duplicates (`Three/`, zip) and empty `Five/` we
 | `One/` | `app.js` + `index.html` | 40K | Vanilla JS + canvas, custom circle/segment physics | none | Seeded procedural maze marble race; daily/share seed, map, debug HUD; no zombies or weapons |
 | `Two/` | single HTML | 80K | Rapier2D 0.18.2 (jsDelivr ESM) | none | Zombie marble run: weapons, boss, shields, boosts, replay, touch |
 | `Four/` | Vite project | 964K | React 19 + TS + Vite 8 + Tailwind 4 + Rapier2D 0.21 (npm) | `npm install` + `npm run dev/build` | Most engineered: split physics modules, seeded determinism, tests and benchmarks, powers, replay, leaderboard, adaptive viewport |
-| `Six/` | single HTML | 72K | Matter.js 0.19 (cdnjs) | none | Same zombie feature set; HUD, map, help, pause, mute, local leaderboard, daily seed |
+| `Six/` | single HTML ×2 | 72K + 76K | Matter.js 0.19 (cdnjs) | none | Same zombie feature set; HUD, map, help, pause, mute, local leaderboard, daily seed. Second file, `marble-race.html`, is a balance/visual variant (see `Six/marble-race.md`) |
 | `Seven/` | single HTML | 72K | Rapier2D 0.14 (unpkg) | none | Older Rapier variant of the zombie game; same feature set as Two/Three |
 | `Eight/` | Vite project | 1.4M | React 19 + TS + Vite + Tailwind + Rapier2D 0.21 + Gemini/express | `npm`/`bun` | AI Studio export: Four's features plus cast session, renderer split, pause/results, expanded audio |
 

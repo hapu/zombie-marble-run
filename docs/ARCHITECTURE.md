@@ -4,10 +4,11 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 
 ## Components
 - `index.html` — the page: canvas, status line, loads `src/main.js` as an ES module.
-- `src/main.js` — bootstrap: initializes Rapier2D, creates the world, ground, and placeholder marble, runs a fixed 60 Hz step, draws with canvas, handles resize and pointer impulse.
+- `src/main.js` — bootstrap: initializes Rapier2D, owns session lifecycle and the fixed 60 Hz accumulator loop, delegates world building and spawning to modules, and wires input, combat, and rendering.
 - `src/gameConfig.js` — shared non-Rapier constants for dimensions, teams, zombies, and weapons.
 - `src/world.js` / `src/entities.js` / `src/combat.js` — physics and simulation modules; they may import Rapier and create or mutate bodies.
 - `src/render.js` — canvas-only presentation; it reads simulation state but must not import Rapier or mutate physics bodies.
+- `src/input.js` — keyboard and pointer controls for start/reset, abilities, and restart; no physics dependency.
 - `scripts/build-offline.py` — dependency-free bundler that inlines the HTML, source modules, assets, and vendored Rapier engine into `dist/zombie-marble-run.html`.
 - `vendor/rapier.mjs` — Rapier2D 0.21.0 (Apache-2.0), the `-compat` build with the WASM embedded; vendored and pinned for offline use. License in `vendor/LICENSE.rapier`.
 - `prototypes/<Name>/` — the incoming games (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`), kept self-contained until merged.
