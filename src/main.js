@@ -10,6 +10,7 @@ import {
   draw, resize,
 } from "./render.js";
 import { setupInput } from "./input.js";
+import { GRAVITY_MPS2, PHYSICS_HZ, pixelsToMeters } from "./physicsUnits.js";
 
 const canvas = document.getElementById("game");
 const status = document.getElementById("status");
@@ -23,8 +24,7 @@ const btnBoost = document.getElementById("btnBoost");
 const btnShield = document.getElementById("btnShield");
 const btnHeal = document.getElementById("btnHeal");
 
-const PX_PER_M = 50;
-const FIXED_DT = 1 / 60;
+const FIXED_DT = 1 / PHYSICS_HZ;
 const GROUND_Y = 0;
 
 const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -124,13 +124,18 @@ function resetGame() {
 
 async function initPhysics() {
   await RAPIER.init();
-  world = new RAPIER.World({ x: 0, y: 9.81 });
+  world = new RAPIER.World({ x: 0, y: GRAVITY_MPS2 });
   world.timestep = FIXED_DT;
+  world.numSolverIterations = 6;
+  world.maxCcdSubsteps = 4;
 
   const ground = world.createRigidBody(
-    RAPIER.RigidBodyDesc.fixed().setTranslation(0, GROUND_Y),
+    RAPIER.RigidBodyDesc.fixed().setTranslation(0, pixelsToMeters(GROUND_Y)),
   );
-  world.createCollider(RAPIER.ColliderDesc.cuboid(50, 0.5), ground);
+  world.createCollider(
+    RAPIER.ColliderDesc.cuboid(pixelsToMeters(50), pixelsToMeters(0.5)),
+    ground,
+  );
 
   window.__game = { world };
 
@@ -180,7 +185,7 @@ function frame(now) {
       if (S && S.gameOver) state = "done";
     }
 
-    draw(ctx, S, state, simT, width, height, PX_PER_M);
+    draw(ctx, S, state, simT, width, height);
 
     if (state === "racing" && S) {
       const zCount = S.marbles.filter(m => m.zombie && !m.gone).length;

@@ -40,7 +40,7 @@ Across the zombie prototypes, seeds generally determine course layout but not ev
 
 ## What the live game has, and what to bring over
 
-The current vanilla/Rapier `src/` implements the basic loop: 15 colored marbles, a fixed 5x5 snake route with belts, 30 zombies, five weapons with ammo/reload, HP and infection, Boost/Shield/Heal, a fixed 60 Hz step, a leading-human camera, basic HP bars, and a minimal start/HUD/restart interface. It does **not** yet expose most of those controls in a full settings flow, nor does it have playable chunk obstacles. `world.js` explicitly notes that lift/wind content is unported. The current seed and zombie/event randomness are also not fully reproducible.
+The current vanilla/Rapier `src/` implements the basic loop: 15 colored marbles, a fixed 5x5 snake route with belts, 30 zombies, five weapons with ammo/reload, HP and infection, Boost/Shield/Heal, a fixed 60 Hz step, a leading-human camera, basic HP bars, and a minimal start/HUD/restart interface. Rapier uses SI meters behind a 50 px/m boundary; gameplay and rendering remain pixel-based. The human marble radius is 9 px (0.18 m) and its mass is about 0.51 kg. It does **not** yet expose most controls in a full settings flow, nor does it have playable chunk obstacles. `world.js` explicitly notes that lift/wind content is unported. The current seed and zombie/event randomness are also not fully reproducible.
 
 Recommended port order:
 

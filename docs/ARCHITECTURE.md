@@ -6,6 +6,7 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `index.html` — the page: canvas, status line, loads `src/main.js` as an ES module.
 - `src/main.js` — bootstrap: initializes Rapier2D, owns session lifecycle and the fixed 60 Hz accumulator loop, delegates world building and spawning to modules, and wires input, combat, and rendering.
 - `src/gameConfig.js` — shared non-Rapier constants for dimensions, teams, zombies, and weapons.
+- `src/physicsUnits.js` — SI physics contract: Rapier uses meters and seconds; 50 px = 1 m. Game and renderer values stay in pixels and are converted at Rapier reads/writes.
 - `src/world.js` / `src/entities.js` / `src/combat.js` — physics and simulation modules; they may import Rapier and create or mutate bodies.
 - `src/render.js` — canvas-only presentation; it reads simulation state but must not import Rapier or mutate physics bodies.
 - `src/input.js` — keyboard and pointer controls for start/reset, abilities, and restart; no physics dependency.
@@ -14,10 +15,10 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `prototypes/<Name>/` — the incoming games (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`), kept self-contained until merged.
 - `assets/` — shared sprites and audio.
 - `scripts/serve.sh` — static dev server (`python3 -m http.server`), no Node needed.
-- `tests/smoke.sh` — serves the repo and checks the page, engine, and bootstrap load.
+- `tests/smoke.sh` — serves the repo, runs SI unit/gravity assertions, and checks the page, engine, bootstrap, and offline build.
 
 ## Data flow
-Page loads `src/main.js` → `RAPIER.init()` starts the embedded physics module → the loop accumulates time and steps the world at 60 Hz → canvas draws bodies from Rapier transforms. Prototypes contribute bodies, rules, and assets that move into `src/` and `assets/`.
+Page loads `src/main.js` → `RAPIER.init()` starts the embedded physics module → the loop accumulates time and steps the world at 60 Hz with 9.81 m/s² gravity → game measurements convert from pixels to meters at the Rapier boundary, and Rapier transforms convert back to pixels for game logic and canvas drawing. Prototypes contribute bodies, rules, and assets that move into `src/` and `assets/`.
 
 ## Constraints
 - No 3D, no non-free libraries; vanilla JS + canvas.

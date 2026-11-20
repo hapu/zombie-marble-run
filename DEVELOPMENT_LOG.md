@@ -3,6 +3,10 @@
 Newest first. Archive old entries once this passes 3,000 words.
 
 ## 2026-11-20
+- Change or experiment: Resolved the Rapier unit mismatch by converting geometry, gameplay positions/distances, velocities, forces, impulses, and collider density through a 50 px/m SI boundary; set 9.81 m/s² gravity and strengthened solver/CCD settings.
+- Result: Existing pixel tuning remains in gameplay/render code; Rapier tests verify scale, preserved marble mass, one-second gravity displacement, and a five-second race simulation. `node tests/physics-units.mjs` passes.
+
+## 2026-11-20
 - Change or experiment: Compared the live `src/` game with all six retained prototypes; expanded `prototypes/ANALYSIS.md` with each prototype's implemented features and a prioritized porting list.
 - Result: The current race/combat/ability core and major missing candidates are documented; confirmed no retained prototype implements networked multiplayer. `bash scripts/check-words.sh && bash tests/smoke.sh` (to run).
 - Change or experiment: Converted the analysis's high- and medium-priority prototype recommendations into actionable `TODO.md` items.

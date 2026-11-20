@@ -41,6 +41,7 @@ check() {
 check index.html 'id="game"'
 check vendor/rapier.mjs 'WebAssembly'
 check src/main.js 'new RAPIER.World'
+node tests/physics-units.mjs
 
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'

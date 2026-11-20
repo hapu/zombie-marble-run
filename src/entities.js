@@ -4,6 +4,7 @@
 import { CS, HP, R, ZT, TEAMS, WEAPONS } from "./gameConfig.js";
 import { circ, O } from "./world.js";
 import { abilityStateTarget, abilityStateBoostUntil, abilityStateShieldUntil } from "./combat.js";
+import { metersToPixels, pixelsToMeters } from "./physicsUnits.js";
 
 const VMAX = 190;
 const ZVMAX = 120;
@@ -119,13 +120,19 @@ export function stepSim(world, S, dt) {
     if (z.t !== "belt") continue;
     for (const m of act) {
       if (m.fin) continue;
-      const { x: mx, y: my } = m.rb.translation();
+      const position = m.rb.translation();
+      const mx = metersToPixels(position.x);
+      const my = metersToPixels(position.y);
       const inZone = Math.abs(mx - z.x) < z.w / 2 && Math.abs(my - z.y) < z.h / 2;
       if (!inZone) continue;
       const targetSpeed = z.f * z.dir * BELT_SPEED;
-      const vx = m.rb.linvel().x;
+      const velocity = m.rb.linvel();
+      const vx = metersToPixels(velocity.x);
       const response = 0.22;
-      m.rb.setLinvel({ x: vx + (targetSpeed - vx) * response, y: m.rb.linvel().y }, true);
+      m.rb.setLinvel({
+        x: pixelsToMeters(vx + (targetSpeed - vx) * response),
+        y: velocity.y,
+      }, true);
       m._beltLast = S.simT;
     }
   }
@@ -147,24 +154,33 @@ export function stepSim(world, S, dt) {
     const humansList = humans(S);
     for (const m of act) {
       if (!m.zombie || m.fin) continue;
-      const { x: mx, y: my } = m.rb.translation();
+      const position = m.rb.translation();
+      const mx = metersToPixels(position.x);
+      const my = metersToPixels(position.y);
       let t = null;
       let bd = ZR;
       for (const h of humansList) {
-        const { x: hx, y: hy } = h.rb.translation();
+        const humanPosition = h.rb.translation();
+        const hx = metersToPixels(humanPosition.x);
+        const hy = metersToPixels(humanPosition.y);
         const d = Math.hypot(hx - mx, hy - my);
         if (d < bd) { bd = d; t = h; }
       }
       let dx = 0, dy = 0;
       if (t) {
-        const { x: tx, y: ty } = t.rb.translation();
+        const targetPosition = t.rb.translation();
+        const tx = metersToPixels(targetPosition.x);
+        const ty = metersToPixels(targetPosition.y);
         dx = tx - mx; dy = ty - my;
         const l = Math.hypot(dx, dy) || 1;
         dx /= l; dy /= l;
       }
       const accel = ZACCEL * ((S.zf ?? ZF) / 0.00026);
       const mass = m.rb.mass();
-      m.rb.addForce({ x: dx * accel * mass, y: dy * accel * mass }, true);
+      m.rb.addForce({
+        x: pixelsToMeters(dx * accel * mass),
+        y: pixelsToMeters(dy * accel * mass),
+      }, true);
     }
   }
 
@@ -172,10 +188,17 @@ export function stepSim(world, S, dt) {
   for (const m of act) {
     const boosted = m === abilityStateTarget() && S.simT < abilityStateBoostUntil();
     const vm = m.zombie ? ZVMAX * (m.zv || 1.2) : (boosted ? 300 : VMAX);
-    const v = m.rb.linvel();
+    const rawVelocity = m.rb.linvel();
+    const v = {
+      x: metersToPixels(rawVelocity.x),
+      y: metersToPixels(rawVelocity.y),
+    };
     const sp = Math.hypot(v.x, v.y);
     if (sp > vm) {
-      m.rb.setLinvel({ x: v.x * vm / sp, y: v.y * vm / sp }, true);
+      m.rb.setLinvel({
+        x: pixelsToMeters(v.x * vm / sp),
+        y: pixelsToMeters(v.y * vm / sp),
+      }, true);
     }
 
     // Track progress through chunks
@@ -202,13 +225,18 @@ export function stepSim(world, S, dt) {
 
 // Track which chunk a marble is in and its progress.
 function track(S, m) {
-  const { x: px, y: py } = m.rb.translation();
+  const position = m.rb.translation();
+  const px = metersToPixels(position.x);
+  const py = metersToPixels(position.y);
   const gy = Math.floor(py / CS);
   const gx = Math.floor(px / CS);
   const ri = S.grid[gy] ? S.grid[gy][gx] : undefined;
   if (ri === undefined || (m.ri !== undefined && Math.abs(ri - m.ri) > 1)) {
     if (m.safe) {
-      m.rb.setTranslation(m.safe, true);
+      m.rb.setTranslation({
+        x: pixelsToMeters(m.safe.x),
+        y: pixelsToMeters(m.safe.y),
+      }, true);
       m.rb.setLinvel({ x: 0, y: 0 }, true);
     }
     return;
@@ -254,10 +282,14 @@ export function checkCollisions(world, S) {
   const humansList = humans(S);
   const zombies = act.filter(m => m.zombie);
   for (const z of zombies) {
-    const { x: zx, y: zy } = z.rb.translation();
+    const zombiePosition = z.rb.translation();
+    const zx = metersToPixels(zombiePosition.x);
+    const zy = metersToPixels(zombiePosition.y);
     for (const h of humansList) {
       if (h.fin || h.gone) continue;
-      const { x: hx, y: hy } = h.rb.translation();
+      const humanPosition = h.rb.translation();
+      const hx = metersToPixels(humanPosition.x);
+      const hy = metersToPixels(humanPosition.y);
       const d = Math.hypot(hx - zx, hy - zy);
       const reach = (z.rad || R) + (h.rad || R) + 4;
       if (d < reach) {

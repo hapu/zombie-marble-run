@@ -2,6 +2,7 @@
 // Ported from prototype Two's draw() logic.
 
 import { CS, HP, R, ZT, TEAMS } from "./gameConfig.js";
+import { metersToPixels } from "./physicsUnits.js";
 
 let cam = { x: 180, y: 200 };
 let zoom = 1;
@@ -30,11 +31,7 @@ export function fit(canvas, ctx, dpr) {
   return { cw, ch };
 }
 
-function toScreen(x, y, width, height, PX_PER_M, GROUND_Y = 0) {
-  return { x: width / 2 + x * PX_PER_M, y: height - 40 - (y - GROUND_Y) * PX_PER_M };
-}
-
-export function draw(ctx, S, state, simT, width, height, PX_PER_M) {
+export function draw(ctx, S, state, simT, width, height) {
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = "#12121a";
   ctx.fillRect(0, 0, width, height);
@@ -50,9 +47,15 @@ export function draw(ctx, S, state, simT, width, height, PX_PER_M) {
   if (humansList.length > 0) {
     const ld = humansList.reduce((a, b) => b.prog > a.prog ? b : humansList[0]);
     let cx = 0, cy = 0;
-    humansList.forEach(m => { const p = m.rb.translation(); cx += p.x; cy += p.y; });
+    humansList.forEach(m => {
+      const p = m.rb.translation();
+      cx += metersToPixels(p.x);
+      cy += metersToPixels(p.y);
+    });
     cx /= humansList.length; cy /= humansList.length;
-    const { x: lx, y: ly } = ld.rb.translation();
+    const leaderPosition = ld.rb.translation();
+    const lx = metersToPixels(leaderPosition.x);
+    const ly = metersToPixels(leaderPosition.y);
     cam.x += (lx * 0.6 + cx * 0.4 - cam.x) * 0.1;
     cam.y += (ly * 0.6 + cy * 0.4 - cam.y) * 0.1;
   }
@@ -96,7 +99,9 @@ export function draw(ctx, S, state, simT, width, height, PX_PER_M) {
   // Draw marbles and zombies
   for (const m of S.marbles) {
     if (m.gone) continue;
-    const { x, y } = m.rb.translation();
+    const position = m.rb.translation();
+    const x = metersToPixels(position.x);
+    const y = metersToPixels(position.y);
     if (!inv(x, y)) continue;
     const rr = m.rad || R;
     ctx.beginPath();

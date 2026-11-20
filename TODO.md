@@ -16,12 +16,12 @@
 - [x] Review prototypes and choose the shared physics/gameplay core
 - [x] Set up the base game in `src/` from the `Two` gameplay
 - [x] Define the single-page game loop and scene structure
-- [ ] Establish the physics contract (decisions pending)
-  - [ ] Decide scale: pixels at 50 px/m with gravity 490.5, or keep current floaty units
-  - [ ] Decide fixed step: 60 Hz or 120 Hz
-  - [ ] Define standard marble dimensions and mass for the chosen scale
-  - [ ] Convert chunk, obstacle, weapon, zombie, and race distances consistently
-  - [ ] Rebalance velocity, gravity, forces, friction, and restitution at that scale
+- [x] Establish the physics contract
+  - [x] Use SI meters in Rapier with a 50 px/m conversion boundary
+  - [x] Keep the fixed step at 60 Hz; use 9.81 m/s² gravity, 6 solver iterations, and 4 CCD substeps
+  - [x] Define the standard human marble as radius 9 px (0.18 m), approximately 0.51 kg
+  - [x] Convert world geometry, gameplay positions/distances, velocities, forces, impulses, and collider density consistently
+  - [x] Preserve gameplay tuning in pixel units while converting physics inputs and outputs
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
 - [ ] Physics audit follow-up

@@ -4,6 +4,10 @@
 
 import RAPIER from "../vendor/rapier.mjs";
 import { CS, ROWS, COLS, HP, R, ZT, TEAMS, WEAPONS, DIFFS } from "./gameConfig.js";
+import {
+  pixelsToMeters,
+  densityPerPixelSquaredToPerMeterSquared,
+} from "./physicsUnits.js";
 
 const O = { isStatic: true, friction: 0.02, frictionStatic: 0, restitution: 0.25 };
 
@@ -25,9 +29,14 @@ function rngOf(s) {
 
 function rect(world, x, y, w, h, angle = 0, col = null, statics = null) {
   const rb = world.createRigidBody(
-    RAPIER.RigidBodyDesc.fixed().setTranslation(x, y).setRotation(angle),
+    RAPIER.RigidBodyDesc.fixed()
+      .setTranslation(pixelsToMeters(x), pixelsToMeters(y))
+      .setRotation(angle),
   );
-  world.createCollider(RAPIER.ColliderDesc.cuboid(w / 2, h / 2), rb);
+  world.createCollider(
+    RAPIER.ColliderDesc.cuboid(pixelsToMeters(w / 2), pixelsToMeters(h / 2)),
+    rb,
+  );
   const b = { rb, col, x, y, w, h, angle };
   if (statics) statics.push(b);
   return b;
@@ -36,13 +45,13 @@ function rect(world, x, y, w, h, angle = 0, col = null, statics = null) {
 function circ(world, x, y, rad, col = null, opts = {}) {
   const rb = world.createRigidBody(
     RAPIER.RigidBodyDesc.dynamic()
-      .setTranslation(x, y)
+      .setTranslation(pixelsToMeters(x), pixelsToMeters(y))
       .setLinearDamping((opts.frictionAir ?? 0) * 60),
   );
-  const cd = RAPIER.ColliderDesc.ball(rad)
+  const cd = RAPIER.ColliderDesc.ball(pixelsToMeters(rad))
     .setRestitution(opts.restitution ?? 0.25)
     .setFriction(opts.friction ?? 0)
-    .setDensity(opts.density ?? 1);
+    .setDensity(densityPerPixelSquaredToPerMeterSquared(opts.density ?? 1));
   world.createCollider(cd, rb);
   return { rb, col, x, y, rad, kind: "circle" };
 }
