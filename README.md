@@ -22,7 +22,8 @@ network connection is required.
 ## Check
 ```bash
 bash scripts/check-words.sh   # context-file word budgets
-bash tests/smoke.sh           # page, engine, and bootstrap load
+bash scripts/check-repo.sh    # required files, secrets, syntax, and links
+bash tests/smoke.sh           # repo checks, page/engine/bootstrap, offline build
 ```
 
 ## Working with AI assistants
@@ -56,3 +57,6 @@ Incoming games live in `prototypes/<Name>/`; see `prototypes/README.md` for the 
 
 ## Keys
 Copy names from `config/examples/env.example` into your shell profile. Never commit real keys.
+
+## License
+Apache-2.0. Rapier2D is vendored under Apache-2.0; see `vendor/LICENSE.rapier`.

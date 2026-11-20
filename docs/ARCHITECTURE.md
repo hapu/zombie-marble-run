@@ -1,5 +1,8 @@
 # Architecture
 
+Keep under 600 words. Update when the structure changes.
+
+## Overview
 Single-page browser game: one `index.html`, no build step, free/open-source libraries only.
 
 ## Components
@@ -11,16 +14,29 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `src/render.js` — canvas-only presentation; it reads simulation state but must not import Rapier or mutate physics bodies.
 - `src/input.js` — keyboard and pointer controls for start/reset, abilities, and restart; no physics dependency.
 - `scripts/build-offline.py` — dependency-free bundler that inlines the HTML, source modules, assets, and vendored Rapier engine into `dist/zombie-marble-run.html`.
+- `scripts/check-repo.sh` — checks required context files, tracked secrets, shell syntax, and local Markdown links.
 - `vendor/rapier.mjs` — Rapier2D 0.21.0 (Apache-2.0), the `-compat` build with the WASM embedded; vendored and pinned for offline use. License in `vendor/LICENSE.rapier`.
 - `prototypes/<Name>/` — the incoming games (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`), kept self-contained until merged.
 - `assets/` — shared sprites and audio.
 - `scripts/serve.sh` — static dev server (`python3 -m http.server`), no Node needed.
-- `tests/smoke.sh` — serves the repo, runs SI unit/gravity assertions, and checks the page, engine, bootstrap, and offline build.
+- `tests/physics-units.mjs` — Node assertions for the SI contract, marble mass, gravity, and a five-second race simulation.
+- `tests/smoke.sh` — serves the repo, runs repo checks and SI assertions, and checks the page, engine, bootstrap, and offline build.
 
 ## Data flow
 Page loads `src/main.js` → `RAPIER.init()` starts the embedded physics module → the loop accumulates time and steps the world at 60 Hz with 9.81 m/s² gravity → game measurements convert from pixels to meters at the Rapier boundary, and Rapier transforms convert back to pixels for game logic and canvas drawing. Prototypes contribute bodies, rules, and assets that move into `src/` and `assets/`.
+
+## External dependencies
+- Rapier2D 0.21.0 (Apache-2.0), vendored as `vendor/rapier.mjs`; license in `vendor/LICENSE.rapier`.
 
 ## Constraints
 - No 3D, no non-free libraries; vanilla JS + canvas.
 - Must run on a 4 GB Chromebook and an Android phone.
 - Small modules so free-tier assistants stay within context limits.
+
+## Edit boundaries
+- Files intended for routine editing: `index.html`, `src/`, `assets/`, and context docs.
+- Files to leave alone: `vendor/`, generated `dist/`, and the reference-only `prototypes/` unless the task requires it.
+- Update `scripts/` and `tests/` only when intentionally changing setup or validation.
+
+## Open questions
+- None currently; see `TODO.md` for pending decisions.

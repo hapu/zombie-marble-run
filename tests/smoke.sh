@@ -28,6 +28,8 @@ for _ in $(seq 1 50); do
 done
 
 fail=0
+bash scripts/check-repo.sh || fail=1
+
 check() {
   local path="$1" marker="$2"
   if curl -fsS "http://127.0.0.1:$port/$path" | grep -q "$marker"; then
@@ -45,6 +47,7 @@ node tests/physics-units.mjs
 
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
+check dist/zombie-marble-run.html 'PX_PER_METER'
 if ! grep -q 'type="module"' dist/zombie-marble-run.html; then
   echo "ok    dist/zombie-marble-run.html (no module imports)"
 else

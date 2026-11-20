@@ -8,7 +8,7 @@
 
 ## During
 1. One coherent change at a time, small enough to review.
-2. Run `bash scripts/check-words.sh` after doc edits (add project-specific check commands here as they appear).
+2. Run `bash scripts/check-words.sh && bash tests/smoke.sh` after doc or code changes. Add project-specific checks to `tests/smoke.sh`.
 3. Update docs when behavior, setup, or decisions change.
 4. Never overwrite another device's uncommitted work. Use separate branches or worktrees for simultaneous changes.
 

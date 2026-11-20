@@ -11,4 +11,7 @@ check WORKSHOP.md 2000
 check AGENTS.md 500
 check PROJECT_CONTEXT.md 800
 check HANDOFF.md 300
+check TODO.md 500
+check docs/ARCHITECTURE.md 600
+check docs/WORKFLOW.md 800
 exit $fail

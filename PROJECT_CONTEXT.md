@@ -12,9 +12,16 @@ Consolidate six prototype webpage games into a single-page browser game.
 ## Constraints
 - Devices: Android phone + 4 GB Chromebook
 - Budget: free tiers only unless approved
+- Stack / versions: Vanilla JS ES modules, HTML5 Canvas, Rapier2D 0.21.0, Python 3; no build step
+- Licensing: Apache-2.0; Rapier2D Apache-2.0 (vendored)
+- Other:
 
 ## Definition of done
-- Free of bugs, polished look and feel, some form of multiplayer
+- Testable outcome: Six prototype feature sets consolidated into one playable race loop without known game-breaking bugs.
+- User-visible behavior: Polished feel, full touch controls, and some form of multiplayer.
+- Checks that must pass: `bash scripts/check-words.sh && bash tests/smoke.sh`; `python3 scripts/build-offline.py`.
 
 ## Current state
-- Repo contains six analyzed prototypes (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`) plus a vanilla JS + canvas, vendored Rapier2D 0.21.0 (Apache-2.0) single-page implementation. The shared game has the Two-based race loop and flat-belt content. Rapier uses SI units behind a 50 px/m conversion boundary; gameplay and rendering remain pixel-based. Physics and rendering are separated into independent modules, and `scripts/build-offline.py` creates a one-file offline build.
+- What exists: Six analyzed prototypes (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`) plus a vanilla JS + canvas, vendored Rapier2D 0.21.0 (Apache-2.0) single-page implementation.
+- What runs: The shared game has the Two-based race loop and flat-belt content. Rapier uses SI units behind a 50 px/m conversion boundary; gameplay and rendering remain pixel-based. Physics and rendering are separated into modules, and `scripts/build-offline.py` creates a one-file offline build.
+- What is missing: Repeatable combat races, effective seeds, target filtering, camera selection, remaining chunk families, obstacles, audio, replay, map, leaderboard, and multiplayer. See `TODO.md`.

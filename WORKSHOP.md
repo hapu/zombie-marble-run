@@ -54,6 +54,7 @@ ai-workshop-template/
 │   ├── ARCHITECTURE.md   components of the current project
 │   └── ROADMAP.md        workshop build-out phases
 ├── scripts/              helper scripts (check-words.sh)
+├── tests/                repo and app checks (smoke.sh)
 ├── config/examples/      sample config, never real secrets
 └── .gitignore
 ```
@@ -69,12 +70,15 @@ Free-tier APIs have tight input limits, so context files stay small. Use bullets
 | AGENTS.md | 500 |
 | PROJECT_CONTEXT.md | 800 |
 | HANDOFF.md | 300 |
+| TODO.md | 500 |
+| docs/ARCHITECTURE.md | 600 |
+| docs/WORKFLOW.md | 800 |
 | DEVELOPMENT_LOG.md | Archive entries older than the last ~20 once it passes 3,000 |
 
 ## 7. Workflow (details in `docs/WORKFLOW.md`)
 
 - **Start:** inspect branch and working tree, read `AGENTS.md`, `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, and `docs/WORKFLOW.md`, `git pull --rebase` only if clean, pick one task.
-- **During:** one small change at a time, run `bash scripts/check-words.sh` (and project checks as added), update docs when behavior or decisions change.
+- **During:** one small change at a time, run `bash scripts/check-words.sh && bash tests/smoke.sh` (and project checks as added), update docs when behavior or decisions change.
 - **End:** summarize, record check results, update `HANDOFF.md` (and `DEVELOPMENT_LOG.md` for notable changes/experiments), review `git diff`, commit and push only when explicitly asked.
 
 ## 8. Security (details in `docs/SECURITY.md`)
@@ -103,4 +107,4 @@ Free-tier APIs have tight input limits, so context files stay small. Use bullets
 
 ## 11. Current mission
 
-Stabilize the workshop first. No single game or app is the organizing principle; projects come later through the template.
+Consolidate the prototype games into one polished, playable single-page game. Project goals, state, and tasks belong in `PROJECT_CONTEXT.md`, `HANDOFF.md`, and `TODO.md`.

@@ -61,6 +61,7 @@ def main() -> None:
 
     modules = [
         ROOT / "src" / "gameConfig.js",
+        ROOT / "src" / "physicsUnits.js",
         ROOT / "src" / "world.js",
         ROOT / "src" / "entities.js",
         ROOT / "src" / "combat.js",

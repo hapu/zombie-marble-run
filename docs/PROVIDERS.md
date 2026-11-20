@@ -1,6 +1,15 @@
 # Providers
 
-Limits and terms change. Verify each row from the official source and update the date. Leave a cell as "unverified" until you have checked it.
+Limits and terms change. Verify each row from the official source and update the date. Leave a cell as "unverified" until you have checked it. Never copy a row from another project without re-checking it.
+
+## Verification protocol
+- Use the provider's official pricing, rate-limit, or terms page.
+- Record the exact limits and the date checked.
+- Note conflicts and unstated limits instead of guessing.
+- Re-verify every 90 days or before relying on a limit.
+- Keep historical corrections in the verification log; do not silently overwrite a removed limit.
+
+## Providers
 
 | Provider | Access type (free / trial / credits) | Limits and models | Last verified | Link |
 | :--- | :--- | :--- | :--- | :--- |
@@ -12,6 +21,12 @@ Limits and terms change. Verify each row from the official source and update the
 | Cloudflare Workers AI | Free plan (no card) | 10,000 Neurons/day, reset 00:00 UTC; free text generation 300 RPM; some frontier models require Workers Paid or AI Gateway credits. | 2026-11-18 | https://developers.cloudflare.com/workers-ai/platform/pricing/ |
 | Hugging Face | Paid (PRO / purchased credits) | Free accounts get no monthly Inference Providers credits; PRO includes $2/month and Team/Enterprise $2 per seat; otherwise pay-as-you-go. | 2026-11-18 | https://huggingface.co/docs/inference-providers/pricing |
 | OpenRouter | Free models (no card) | `:free` models: 20 RPM and 50 RPD; 1,000 RPD after $10 of lifetime credit purchases. Failed requests count toward the daily cap. | 2026-11-18 | https://openrouter.ai/docs/api-reference/limits |
+
+## Verification log
+
+| Date | Provider | What changed / source |
+| :--- | :--- | :--- |
+| 2026-11-18 | All listed providers | Initial verification from official rate-limit and pricing pages. |
 
 ## Record for each provider
 - Free, trial, or credit-based

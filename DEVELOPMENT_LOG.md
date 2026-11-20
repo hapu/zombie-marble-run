@@ -1,6 +1,6 @@
 # Development Log
 
-Newest first. Archive old entries once this passes 3,000 words.
+Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-20
 - Change or experiment: Reviewed the active game, docs, tests, and build/serve workflow; added prioritized pre-port issues and recommendations to `TODO.md`.
@@ -15,6 +15,11 @@ Newest first. Archive old entries once this passes 3,000 words.
 - Result: The current race/combat/ability core and major missing candidates are documented; confirmed no retained prototype implements networked multiplayer. `bash scripts/check-words.sh && bash tests/smoke.sh` (to run).
 - Change or experiment: Converted the analysis's high- and medium-priority prototype recommendations into actionable `TODO.md` items.
 - Result: Recommended ports are ordered by priority, including determinism/configuration, course content, race feedback, combat presentation, mobile/audio, and testing.
+
+## 2026-11-19
+- Change or experiment: Pulled the SI physics and prioritized-port commits, merged the workshop-template workflow/context sync, added `scripts/check-repo.sh`, and fixed the offline bundle to include `src/physicsUnits.js`.
+- Checks / result: `bash scripts/check-words.sh`, `bash scripts/check-repo.sh`, `node tests/physics-units.mjs`, and `bash tests/smoke.sh` pass; `scripts/build-offline.py` wrote a 3359 KB build containing `PX_PER_METER`.
+- Follow-up: Verify the offline page starts, then establish a repeatable race with real combat before adding hazards or UI.
 
 ## 2026-11-19
 - Change or experiment: Synced the variant's ammo removal, rebalanced weapons, HP/weapon rendering, and per-weapon FX into `Zombie Marble Run.html`, leaving weapon cooldowns as the only difference, and updated the Six README, variant analysis, prototype inventory, and handoff to match.

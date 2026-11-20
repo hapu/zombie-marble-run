@@ -1,7 +1,6 @@
 .env
 .env.*
-!config/examples/env.example
-!prototypes/**/.env.example
+!**/.env.example
 *.key
 *.pem
 secrets/
