@@ -1,7 +1,8 @@
 # Prototype Six: Zombie Marble Run (Matter.js)
 
 The only Matter.js build in the repo. It contains two single-file versions: the
-original game and the `marble-race.html` balance/visual variant.
+original game and the `marble-race.html` balance/visual variant. See
+`marble-race.md` for a detailed analysis of the variant.
 
 ## Run
 
