@@ -22,6 +22,16 @@
   - [ ] Rebalance velocity, gravity, forces, friction, and restitution at that scale
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
+- [ ] Physics audit follow-up (decisions pending)
+  - [ ] Decide scale contract: pixels at 50 px/m with gravity 490.5, or keep current floaty units
+  - [ ] Decide fixed step: 60 Hz or 120 Hz
+  - [ ] Make RNG seeded and difficulty effective
+  - [ ] Reset ability state and target per race
+  - [ ] Exclude infected/finished marbles from human targets
+  - [ ] Add no-progress rescue and teleport diagnostics
+  - [ ] Render belts and weapon effects
+  - [ ] Restore obstacles and row-drop geometry
+  - [ ] Add headless physics assertions
 
 ## Later
 - [ ] Multiplayer design
