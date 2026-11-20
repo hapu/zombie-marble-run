@@ -22,12 +22,17 @@
   - [x] Define the standard human marble as radius 9 px (0.18 m), approximately 0.51 kg
   - [x] Convert world geometry, gameplay positions/distances, velocities, forces, impulses, and collider density consistently
   - [x] Preserve gameplay tuning in pixel units while converting physics inputs and outputs
+- [ ] Resolve baseline issues before porting more features
+  - [ ] Include `src/physicsUnits.js` in the offline bundle and verify the generated page starts; current smoke checks do not execute the bundle
+  - [ ] Make a normal race produce combat; tune zombie release/pursuit and weapon engagement, then assert outcomes in a repeatable race test
+  - [ ] Restrict zombie pursuit and infection collisions to living, unfinished humans
+  - [ ] Fix leading-marble camera selection so it consistently follows the highest-progress racer
+  - [ ] Decide the minimum multiplayer requirement (local/shared-device or networked) before architecture and polish work
+  - [ ] Limit the development server's network exposure or serve only a safe build directory; document trusted-LAN use
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
 - [ ] Physics audit follow-up
-  - [ ] Make RNG seeded and difficulty effective
   - [ ] Reset ability state and target per race
-  - [ ] Exclude infected/finished marbles from human targets
   - [ ] Add no-progress rescue and teleport diagnostics
   - [ ] Render belts and weapon effects
   - [ ] Restore obstacles and row-drop geometry
@@ -35,7 +40,7 @@
 
 ## High priority prototype ports
 - [ ] Make races reproducible and configurable
-  - [ ] Seed gameplay randomness and add manual, random, daily, and shareable seed controls
+  - [ ] Use the seed for course variation and all gameplay-affecting random rolls; add manual, random, daily, and shareable seed controls
   - [ ] Add participant selection, patient-zero count, and difficulty settings
   - [ ] Reset per-race ability and target state
 - [ ] Port a small, balanced set of course hazards and pickups; validate each against the physics contract before expanding
@@ -51,8 +56,9 @@
 - [ ] Add a lightweight debug/performance overlay
 - [ ] Expand validated hazards and routes with portals, spinners, magnets, fans, lifts, drops, and wind
 - [ ] Add seed/simulation verification tests and physics/render benchmarks
+- [ ] Document Node as a test prerequisite or make the physics test runnable without adding a Node requirement to the lightweight workflow
+- [ ] Align README check instructions and development-log status with the current smoke/build checks
 
 ## Later
-- [ ] Multiplayer design
 - [ ] Optional prediction scoring/streaks and hosted/local leaderboard
 - [ ] Polish pass: feel and presentation

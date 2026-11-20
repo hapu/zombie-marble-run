@@ -3,6 +3,10 @@
 Newest first. Archive old entries once this passes 3,000 words.
 
 ## 2026-11-20
+- Change or experiment: Reviewed the active game, docs, tests, and build/serve workflow; added prioritized pre-port issues and recommendations to `TODO.md`.
+- Result: The backlog now calls out the broken offline module graph, a headless race with no combat, target filtering, ineffective seeds, camera selection, development-server exposure, multiplayer scope, and test-doc drift.
+
+## 2026-11-20
 - Change or experiment: Resolved the Rapier unit mismatch by converting geometry, gameplay positions/distances, velocities, forces, impulses, and collider density through a 50 px/m SI boundary; set 9.81 m/s² gravity and strengthened solver/CCD settings.
 - Result: Existing pixel tuning remains in gameplay/render code; Rapier tests verify scale, preserved marble mass, one-second gravity displacement, and a five-second race simulation. `node tests/physics-units.mjs` passes.
 
