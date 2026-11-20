@@ -2,6 +2,14 @@
 
 Newest first. Archive old entries once this passes 3,000 words.
 
+## 2026-11-19
+- Change or experiment: Reconciled the handoff and Six docs with the now-tracked `marble-race.html`, merged the overlapping physics-scale and audit tasks in `TODO.md`, and hardened `tests/smoke.sh` to pick a free port and poll for readiness instead of using port 8123 and a fixed sleep.
+- Result: `bash scripts/check-words.sh && bash tests/smoke.sh` pass; smoke tests no longer depend on a specific port or startup timing.
+
+## 2026-11-19
+- Change or experiment: Tracked the externally added `prototypes/Six/marble-race.html` balance/visual variant and documented it as part of the Six prototype.
+- Result: The variant now has git provenance; working tree clean after commit.
+
 ## 2026-11-20
 - Change or experiment: Separated shared game constants from physics and renderer dependencies, and added `scripts/build-offline.py` to inline the module graph and vendored Rapier engine into `dist/zombie-marble-run.html`.
 - Result: Offline build succeeds at roughly 3.3 MB; the smoke test now verifies that the generated HTML contains the bundled Rapier object and no module imports.

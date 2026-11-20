@@ -1,13 +1,31 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
-port="${1:-8123}"
 cd "$root"
+
+if [ "$#" -gt 0 ]; then
+  port="$1"
+else
+  port="$(python3 - <<'PY'
+import socket
+s = socket.socket()
+s.bind(("127.0.0.1", 0))
+print(s.getsockname()[1])
+s.close()
+PY
+)"
+fi
 
 python3 -m http.server "$port" --bind 127.0.0.1 >/dev/null 2>&1 &
 pid=$!
 trap 'kill "$pid" 2>/dev/null || true' EXIT
-sleep 1
+
+for _ in $(seq 1 50); do
+  if curl -fsS "http://127.0.0.1:$port/index.html" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 0.1
+done
 
 fail=0
 check() {

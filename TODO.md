@@ -16,15 +16,15 @@
 - [x] Review prototypes and choose the shared physics/gameplay core
 - [x] Set up the base game in `src/` from the `Two` gameplay
 - [x] Define the single-page game loop and scene structure
-- [ ] Refine physics dimensions, weight, and distances to reflect real-life marbles
-  - [ ] Establish a real-world scale, such as standard marble dimensions and mass
+- [ ] Establish the physics contract (decisions pending)
+  - [ ] Decide scale: pixels at 50 px/m with gravity 490.5, or keep current floaty units
+  - [ ] Decide fixed step: 60 Hz or 120 Hz
+  - [ ] Define standard marble dimensions and mass for the chosen scale
   - [ ] Convert chunk, obstacle, weapon, zombie, and race distances consistently
   - [ ] Rebalance velocity, gravity, forces, friction, and restitution at that scale
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
-- [ ] Physics audit follow-up (decisions pending)
-  - [ ] Decide scale contract: pixels at 50 px/m with gravity 490.5, or keep current floaty units
-  - [ ] Decide fixed step: 60 Hz or 120 Hz
+- [ ] Physics audit follow-up
   - [ ] Make RNG seeded and difficulty effective
   - [ ] Reset ability state and target per race
   - [ ] Exclude infected/finished marbles from human targets
