@@ -101,8 +101,8 @@ const {Engine,Bodies,Body,Composite,Events}=Matter;
 const R=9,GRAV=.3,VMAX=3.2,CS=360,COLS=5,FY=352,HP=5,HITCD=.7,ZR=140,BELT=.0007;
 let ZF=.0002,ZD=5,ZHP=4;
 const DIFFS={easy:{zhp:4,zf:.0002,zd:5,n:1},normal:{zhp:5,zf:.00026,zd:3,n:1.25},hard:{zhp:6,zf:.00032,zd:2,n:1.5}};
-const WEAPONS=[{n:"Pistol",i:"🔫",range:150,cd:1.1,dmg:1,kb:.8},{n:"Shotgun",i:"💥",range:90,cd:2,dmg:2,kb:2},{n:"Bat",i:"🏏",range:34,cd:.8,dmg:1,kb:2.2},{n:"Sword",i:"🗡️",range:40,cd:.6,dmg:1.5,kb:.6},{n:"Rifle",i:"🎯",range:220,cd:1.6,dmg:2,kb:.4}];
-[14,6,99,99,8].forEach((c,i)=>WEAPONS[i].clip=c);
+const WEAPONS=[{n:"Pistol",i:"🔫",range:150,cd:1,dmg:1,kb:.8},{n:"Shotgun",i:"💥",range:95,cd:2.2,dmg:3,kb:2.2},{n:"Bat",i:"🏏",range:46,cd:1.8,dmg:3,kb:3},{n:"Sword",i:"🗡️",range:52,cd:.7,dmg:1,kb:.5},{n:"Rifle",i:"🎯",range:240,cd:1.9,dmg:2,kb:.7}];
+
 const ZT={walker:{r:9,hp:ZHP,f:1,v:1.2,d:.002},runner:{r:8,hp:2,f:1.8,v:1.6,d:.002},tank:{r:11,hp:10,f:.8,v:1.1,d:.004},boss:{r:12,hp:24,f:.9,v:1.1,d:.006}};
 const TEAMS=[{n:"Red",c:"#ff2d2d"},{n:"Green",c:"#1fcf3a"},{n:"Blue",c:"#2f5bff"},{n:"Yellow",c:"#ffe81f"},{n:"Cyan",c:"#00e5ff"},{n:"Magenta",c:"#ff2bd6"},{n:"Orange",c:"#ff8a00"},{n:"Chartreuse",c:"#8cff00"},{n:"Spring Green",c:"#00ff7f"},{n:"Azure",c:"#0a8cff"},{n:"Violet",c:"#8b3dff"},{n:"Rose",c:"#ff2d7f"},{n:"Black",c:"#111111",rim:"rgba(255,255,255,.6)"},{n:"Grey",c:"#8a8a8a"},{n:"White",c:"#ffffff",rim:"rgba(0,0,0,.45)"}];
 const FAM=[["Pegs",["Sparse","Double","Dense","Diagonal","Scatter"]],["Bumpers",["Lone","Pair","Triangle","Ceiling","Low"]],["Spinners",["Center","Twin","Windmill","Whirl","Hi-Lo"]],["Crushers",["Single","Duo","Wide","Stomper","Jaws"]],["Gates",["Single","Double","Airlock","Flicker","Slow"]],["Humps",["Speed Bump","Tall","Twin","Wedge","Plateau"]],["Chokes",["Wide","Tight","Pinch","Wedge","Double"]],["Slalom",["Easy","Tight","Zigzag","Rush","Long"]],["Fans",["Tailwind","Headwind","Updraft","Downdraft","Gusts"]],["Kickers",["Light","Heavy","Twin","Launcher","Triple"]],["Pendulums",["Single","Duo","Trio","Quick","Slow"]],["Boost",["Strip","Double","Full","Sprint","Ramp"]],["Magnets",["Pull","Repel","Duo","Vacuum","Ring"]],["Portals",["Skip","Leap","Loop","Warp","Double"]],["Honey",["Sticky","Gooey","Patchy","Swamp","Tar"]],["Crypt",["Two","Three","Four","Five","Six"]],["Medkit",["Small","Pair","Double","Big","Full"]],["Spikes",["Few","Wide","Rows","Rush","Pits"]],["Sweepers",["One","Two","Three","Heavy","Fast"]],["Combo",["Bumper Gale","Slalom Rush","Peg Honey","Spin Medic","Pendulum Spikes"]],["Elevators",["Classic","Express","High","Guarded","Skyline"]],["Air Lifts",["Shaft","Turbo","Gusty","Pegged","Low"]],["Mag Lifts",["Pull","Strong","High","Repulsor","Pegged"]],["Launchers",["Cannon","Heavy","Twin","Bounce","Triple"]],["Towers",["Plinko","Bumper","Spin","Stomp","Sway"]]];
@@ -174,10 +174,10 @@ function makeWorld(nz,seed,opts){
     for(const [y,k,on] of [[oy+CS,"b",1],[oy,"t",cell.gy===0]])if(on){if(conn[k]){hw(ox,ox+CS/2-52,y);hw(ox+CS/2+52,ox+CS,y)}else hw(ox,ox+CS,y)}
     for(const [x,k,on] of [[ox+CS,"r",1],[ox,"l",c===0]])if(on){if(conn[k])vw(x,oy,oy+CS-112);else vw(x,oy,oy+CS)}
     let name;
-    if(type==="H"){const id=opts.force!==undefined?(Array.isArray(opts.force)?(opts.force[hi++]!==undefined?opts.force[hi-1]:57):opts.force):fams[hi++%fams.length]*5+Math.floor(rnd()*5);S.ids.push(id);name=NAME(id);cx.belt(0,CS,BD[id/5|0]);F[id/5|0](cx,id%5,cx.r);if(cx.r()<.45){const kd=["ammo","med","swap"][Math.floor(cx.r()*3)];cx.zone("crate",50+Math.floor(cx.r()*260),332,26,26,{kind:kd,taken:false})}}
+    if(type==="H"){const id=opts.force!==undefined?(Array.isArray(opts.force)?(opts.force[hi++]!==undefined?opts.force[hi-1]:57):opts.force):fams[hi++%fams.length]*5+Math.floor(rnd()*5);S.ids.push(id);name=NAME(id);cx.belt(0,CS,BD[id/5|0]);F[id/5|0](cx,id%5,cx.r);if(cx.r()<.45){const kd=["med","swap"][Math.floor(cx.r()*2)];cx.zone("crate",50+Math.floor(cx.r()*260),332,26,26,{kind:kd,taken:false})}}
     else if(type==="S"){name="Start";cx.belt(0,CS,1);S.gate=cx.rect(292,180,14,344,0,"#c58a52");S.zgate=cx.rect(190,180,14,344,0,"#a9743f");
       const ord=TEAMS.map((t,j)=>j);for(let j=14;j>0;j--){const k=Math.floor(rnd()*(j+1));[ord[j],ord[k]]=[ord[k],ord[j]]}
-      ord.forEach((t,j)=>{const m=S.mk(ox+204+(j%4)*22,oy+343-Math.floor(j/4)*20,t,false);m.w=WEAPONS[j%5];m.ammo=m.w.clip});
+      ord.forEach((t,j)=>{const m=S.mk(ox+204+(j%4)*22,oy+343-Math.floor(j/4)*20,t,false);m.w=WEAPONS[j%5]});
       for(let j=0;j<nz;j++){const q=rnd();S.mk(ox+24+(j%8)*22,oy+343-Math.floor(j/8)*20,-1,true,q<.2?"runner":q<.32?"tank":"walker")}}
     else if(type==="D1"){name="Drop";cx.belt(0,128,1.2);cx.belt(232,360,-1);if(rnd()<.5)cx.circ(180,200,16,"#ff5ea8",1.1);else cx.spin(180,230,100,.06)}
     else if(type==="D2"){name="Landing";cx.belt(0,CS,1.1);cx.circ(150,170,7);cx.circ(210,170,7)}
@@ -230,19 +230,19 @@ function stepSim(S){
       else if(z.t==="tp"){if(S.simT-(m.tpT===undefined?-9:m.tpT)>1.3){m.tpT=S.simT;Body.setPosition(m,{x:z.tx,y:z.ty});m.ri=undefined;m.safe=null;z.flash=S.simT}}
       else if(m.zombie)continue;
       else if(z.t==="heal"){m.healed=m.healed||{};if(!m.healed[z.id]){m.healed[z.id]=1;m.hp=Math.min(HP,m.hp+z.amt);S.heals.push(m)}}
-      else if(z.t==="crate"){if(!z.taken){z.taken=true;if(z.kind==="ammo")m.ammo=m.w.clip;else if(z.kind==="med")m.hp=Math.min(HP,m.hp+2);else{const o=WEAPONS.filter(x=>x!==m.w);m.w=o[Math.floor(Math.random()*o.length)];m.ammo=m.w.clip}S.picks.push({m,kind:z.kind})}}
+      else if(z.t==="crate"){if(!z.taken){z.taken=true;if(z.kind==="med")m.hp=Math.min(HP,m.hp+2);else{const o=WEAPONS.filter(x=>x!==m.w);m.w=o[Math.floor(Math.random()*o.length)]}S.picks.push({m,kind:z.kind})}}
       else if(z.t==="spike")hurt(S,m);
       else if(z.t==="crypt"&&!z.done){z.done=true;for(let j=0;j<z.n;j++)S.pend.push([z.sx+(j-z.n/2)*14,z.sy,j===0&&z.n>=6?"boss":Math.random()<.25?"runner":Math.random()<.15?"tank":"walker"])}
     }
   }
   if(S.zrel)for(const h of act){
-    if(h.zombie||h.fin||h.gone||S.simT<h.wt||(h.w.clip<99&&h.ammo<=0))continue;
+    if(h.zombie||h.fin||h.gone||S.simT<h.wt)continue;
     let t=null,bd=h.w.range;for(const z of act){if(!z.zombie||z.gone||z.ri!==h.ri)continue;const d=Math.hypot(z.position.x-h.position.x,z.position.y-h.position.y);if(d<bd){bd=d;t=z}}
     if(!t)continue;
-    h.wt=S.simT+h.w.cd*(.85+Math.random()*.3);t.zhp-=h.w.dmg;if(h.w.clip<99)h.ammo--;
+    h.wt=S.simT+h.w.cd*(.85+Math.random()*.3);t.zhp-=h.w.dmg;
     const dx=t.position.x-h.position.x,dy=t.position.y-h.position.y,l=Math.hypot(dx,dy)||1;
     Body.setVelocity(t,{x:t.velocity.x+dx/l*h.w.kb,y:t.velocity.y+dy/l*h.w.kb});
-    S.shots.push({x1:h.position.x,y1:h.position.y,x2:t.position.x,y2:t.position.y,c:TEAMS[h.team].c,melee:h.w.range<60,w:h.w.n});
+    S.shots.push({x1:h.position.x,y1:h.position.y,x2:t.position.x,y2:t.position.y,c:TEAMS[h.team].c,melee:h.w.range<60,w:h.w.n,h:h});
     if(t.zhp<=0){t.gone=true;Composite.remove(S.engine.world,t);S.kills.push(t);h.kills=(h.kills||0)+1}
   }
   for(const m of act){
@@ -401,7 +401,7 @@ function hud(){
   const cd=$("card");
   if(pick===null){if(lastCard!=="x"){lastCard="x";cd.style.display="none"}}
   else{const m=S.marbles.find(x=>x.team===pick),t=TEAMS[pick],w=m.w,hp=Math.max(0,m.hp),am=w?(w.clip<99?m.ammo+"/"+w.clip:"∞"):"";
-    const s=`<i class="cdot" style="background:${t.c}"></i> <b>${t.n}</b> <span style="color:#e0443c">${"♥".repeat(hp)}</span><span style="opacity:.3">${"♥".repeat(HP-hp)}</span>${w?` · ${w.i} ${am}`:""}${m.fin?" · ✓ escaped #"+m.fin:m.zombie?" · 🧟 infected":""}`;
+    const s=`<i class="cdot" style="background:${t.c}"></i> <b>${t.n}</b> <span style="color:#e0443c">${"♥".repeat(hp)}</span><span style="opacity:.3">${"♥".repeat(HP-hp)}</span>${w?` · ${w.i} ${w.n}`:""}${m.fin?" · ✓ escaped #"+m.fin:m.zombie?" · 🧟 infected":""}`;
     if(s!==lastCard){lastCard=s;cd.innerHTML=s;cd.style.display="block"}}
   $("time").textContent=S.simT.toFixed(1)+"s · 🧟 "+S.marbles.filter(m=>m.zombie&&!m.gone).length;
 }
@@ -460,10 +460,10 @@ function showHelp(){
   const w=WEAPONS.map(x=>`<p>${x.i} <b>${x.n}</b> · range ${x.range} · damage ${x.dmg} · every ${x.cd}s</p>`).join("");
   e.innerHTML=`<b style="font-size:16px">How to play</b> <span style="opacity:.6">(tap to close)</span>
   <h3>Goal</h3><p>15 colored marbles roll through a track of 25 chunks, each with its own trap. Zombies are released a few seconds in. The first color to the finish line wins, and the more that escape, the better.</p>
-  <h3>Your marbles</h3><p>Each has 5 HP, shown as pips around the marble, and the ring inside shows its ammo. Every zombie touch costs 1 HP; at 0 HP it turns into a zombie. The top bar shows everyone's progress. Tap a dot on it, or a marble, to follow that color.</p>
+  <h3>Your marbles</h3><p>Each has 5 HP, shown as a segmented ring around the marble, and its weapon is drawn inside. Weapons never run out of ammo. Every zombie touch costs 1 HP; at 0 HP it turns into a zombie. The top bar shows everyone's progress. Tap a dot on it, or a marble, to follow that color.</p>
   <h3>Weapons (auto-fire)</h3>${w}
   <h3>Zombies</h3><p>🟢 Walker · 🟡 Runner (fast, fragile) · 🟤 Tank (big, tough) · 🟣 Boss (from Crypts)</p>
-  <h3>Pickups</h3><p>🧰 ammo · ❤️ medkit · 🎲 new weapon</p>
+  <h3>Pickups</h3><p>❤️ medkit (+2 HP) · 🎲 new weapon</p>
   <h3>Predictions</h3><p>The color you follow is your prediction: +1 point if it escapes, +4 if it escapes first. Escapes in a row build a streak (saved in this browser).</p><h3>Menu ⚙</h3><p>Seed (🎲 random, 📅 daily, 🔗 copy link), 🗺 track map, speed, sound. Same seed = same track. Difficulty changes the zombie count.</p>`;
   e.style.display="block";
 }
@@ -508,6 +508,32 @@ function zone(z){
   else if(z.t==="mag"){ctx.setLineDash([6,8]);ctx.strokeStyle=z.f>0?"rgba(179,136,255,.4)":"rgba(255,120,120,.4)";ctx.lineWidth=2;ctx.beginPath();ctx.arc(z.px,z.py,Math.min(z.r,60+((t*40)%60)),0,7);ctx.stroke()}
   ctx.restore();
 }
+function drawWeapon(m,x,y,rr){
+  const k=rr/9,ang=(m.aim!==undefined&&S.simT-(m.shotT||-9)<1.2)?m.aim:(m.velocity.x<-.2?Math.PI:0),w=m.w.n,dark="#25202a",steel="#aab3c5",wood="#7a4a2a";
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(k,k);ctx.lineCap="round";
+  const ln=(x1,y1,x2,y2,wd,col)=>{ctx.strokeStyle=col;ctx.lineWidth=wd;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke()};
+  if(w==="Pistol"){ln(-1,.5,5.5,.5,3.2,dark);ln(-1,.5,5.5,.5,1.5,steel);ln(-.5,1,-1.5,4,2.6,dark)}
+  else if(w==="Shotgun"){ln(-2,-1.2,7,-1.2,2.4,dark);ln(-2,1.2,7,1.2,2.4,dark);ln(-2,-1.2,7,-1.2,1,steel);ln(-2,1.2,7,1.2,1,steel);ln(-3.5,0,-.5,2.6,2.4,wood)}
+  else if(w==="Rifle"){ln(-3,.5,8,.5,2.6,dark);ln(-3,.5,8,.5,1.1,steel);ln(2,-1,4.5,-1,1.6,dark);ln(-4.5,1.5,-2,2.2,2.4,wood)}
+  else if(w==="Bat"){ln(-2,0,7.5,0,3.6,wood);ln(-2,0,7.5,0,1.6,"#e0b27a")}
+  else{ln(-1,0,8,0,2.2,dark);ln(-1,0,8,0,.9,"#f4f1ea");ln(.5,-2.3,.5,2.3,2.2,dark)}
+  ctx.restore();
+}
+function spark(x,y,t,c,r){if(t<0||t>.12)return;ctx.globalAlpha=1-t/.12;ctx.strokeStyle=c;ctx.lineWidth=1.6;for(let i=0;i<5;i++){const a=i*1.257+.3;ctx.beginPath();ctx.moveTo(x+Math.cos(a)*r*.4,y+Math.sin(a)*r*.4);ctx.lineTo(x+Math.cos(a)*r*(.6+t*8),y+Math.sin(a)*r*(.6+t*8));ctx.stroke()}ctx.globalAlpha=1}
+function drawFx(){
+  const keep=[];ctx.lineCap="round";
+  for(const f of fx){
+    const age=S.simT-f.t,dx=f.x2-f.x1,dy=f.y2-f.y1,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d,a=Math.atan2(dy,dx);let life=.3;
+    if(f.w==="Pistol"){const dur=Math.min(.22,d/900);life=dur+.1;if(age<dur){const p=age/dur,bx=f.x1+dx*p,by=f.y1+dy*p;ctx.strokeStyle="rgba(255,226,120,.7)";ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(bx-ux*7,by-uy*7);ctx.lineTo(bx,by);ctx.stroke();ctx.fillStyle="#ffe27a";ctx.beginPath();ctx.arc(bx,by,2,0,7);ctx.fill()}else spark(f.x2,f.y2,age-dur,"#ffe27a",5)}
+    else if(f.w==="Rifle"){const dur=Math.min(.14,d/1800);life=dur+.12;if(age<.06){ctx.fillStyle="rgba(255,240,200,.9)";ctx.beginPath();ctx.arc(f.x1+ux*10,f.y1+uy*10,6*(1-age/.06),0,7);ctx.fill()}
+      if(age<dur){const p=age/dur,bx=f.x1+dx*p,by=f.y1+dy*p;ctx.strokeStyle="rgba(255,160,60,.55)";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(bx-ux*26,by-uy*26);ctx.lineTo(bx,by);ctx.stroke();ctx.strokeStyle="#fff";ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(bx-ux*12,by-uy*12);ctx.lineTo(bx,by);ctx.stroke();ctx.fillStyle="#ffb347";ctx.beginPath();ctx.arc(bx,by,3.6,0,7);ctx.fill()}else spark(f.x2,f.y2,age-dur,"#ffb347",9)}
+    else if(f.w==="Shotgun"){const dur=Math.min(.2,(d+14)/800);life=dur+.12;for(let k=-2;k<=2;k++){const pa=a+k*.1,L=Math.min(d+14,95)*Math.min(1,age/dur);if(age<dur+.06){ctx.globalAlpha=Math.max(0,1-Math.max(0,age-dur)/.06);const px=f.x1+Math.cos(pa)*L,py=f.y1+Math.sin(pa)*L;ctx.strokeStyle="rgba(255,200,100,.5)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px-Math.cos(pa)*6,py-Math.sin(pa)*6);ctx.lineTo(px,py);ctx.stroke();ctx.fillStyle="#ffd37a";ctx.beginPath();ctx.arc(px,py,1.9,0,7);ctx.fill()}}ctx.globalAlpha=1;if(age>dur*.8)spark(f.x2,f.y2,age-dur*.8,"#ffd37a",6)}
+    else{const bat=f.w==="Bat",dur=bat?.3:.12;life=dur+.12;if(age<dur+.08){const p=Math.min(1,age/dur),sw=bat?1.1:.95,Rr=bat?24:21;ctx.globalAlpha=Math.max(0,1-Math.max(0,age-dur)/.08);ctx.strokeStyle=bat?"#f2d9a6":"#e8f4ff";ctx.lineWidth=bat?7*(1-p*.5):3.2*(1-p*.3);ctx.beginPath();ctx.arc(f.x1,f.y1,Rr,a-sw,a-sw+2*sw*p);ctx.stroke();ctx.globalAlpha=1}
+      if(age>dur*.6)spark(f.x2,f.y2,age-dur*.6,bat?"#f2d9a6":"#e8f4ff",bat?10:6)}
+    if(age<life)keep.push(f)
+  }
+  fx=keep;
+}
 function draw(){
   const active=foc&&performance.now()<foc.until;if(!active)foc=null;zoom+=(((active||state==="replay")?(active?1.7:1.5):1)-zoom)*.07;fs+=((active?1:0)-fs)*.1;const sc=Math.min(cw,ch)/560*zoom;lastSc=sc;
   const live=humans().filter(m=>!m.fin&&!m.zombie);let tx=S.cells[0].x+180,ty=S.cells[0].y+200;
@@ -538,13 +564,13 @@ function draw(){
     const bw=rr*2;
     if(m.zombie){if(!lowfx&&m.zhp<m.zmax){ctx.fillStyle="rgba(0,0,0,.6)";ctx.fillRect(x-bw/2-1,y-rr-7,bw+2,4);ctx.fillStyle="#9be36b";ctx.fillRect(x-bw/2,y-rr-6,bw*Math.max(0,m.zhp)/m.zmax,2)}}
     else{
-      if(!m.fin){const pr=rr+4.5;for(let i=0;i<HP;i++){const a=-Math.PI/2+i*(Math.PI*2/HP);ctx.fillStyle=i<m.hp?HPC[m.hp]:"rgba(60,40,20,.28)";ctx.beginPath();ctx.arc(x+Math.cos(a)*pr,y+Math.sin(a)*pr,1.7,0,7);ctx.fill()}
-        if(m.w){const lim=m.w.clip<99,fr=lim?Math.max(0,m.ammo)/m.w.clip:1;ctx.lineWidth=1.8;ctx.lineCap="round";ctx.strokeStyle="rgba(255,255,255,.28)";ctx.beginPath();ctx.arc(x,y,rr*.52,0,7);ctx.stroke();
-          if(fr>0){ctx.strokeStyle=lim?(fr>.3?"rgba(255,255,255,.95)":"#ff6a4d"):"rgba(255,235,150,.9)";ctx.beginPath();ctx.arc(x,y,rr*.52,-Math.PI/2,-Math.PI/2+Math.PI*2*fr);ctx.stroke()}else{ctx.fillStyle="#ff6a4d";ctx.beginPath();ctx.arc(x,y,rr*.16,0,7);ctx.fill()}}}}
+      if(!m.fin){const pr=rr+4.5,seg=Math.PI*2/HP,gap=.3;ctx.lineWidth=2.6;ctx.lineCap="butt";
+        for(let i=0;i<HP;i++){const a0=-Math.PI/2+i*seg+gap/2;ctx.strokeStyle=i<m.hp?HPC[m.hp]:"rgba(60,40,20,.25)";ctx.beginPath();ctx.arc(x,y,pr,a0,a0+seg-gap);ctx.stroke()}
+        if(m.w)drawWeapon(m,x,y,rr)}}
     if(pick===m.team&&m.team>=0){ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.setLineDash([4,3]);ctx.beginPath();ctx.arc(x,y,rr+8,0,7);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#fff";ctx.font="700 11px system-ui";ctx.textAlign="center";ctx.fillText("YOU",x,y-rr-13)}
   }
   if(active&&!lowfx){const p=(performance.now()-foc.start)/(foc.until-foc.start);for(let i=0;i<1;i++){const q=(p*1.5+i*.5)%1;ctx.globalAlpha=(1-q)*.9;ctx.strokeStyle=foc.col;ctx.lineWidth=3;ctx.beginPath();ctx.arc(foc.x,foc.y,10+q*55,0,7);ctx.stroke()}ctx.globalAlpha=1}
-  for(const f of fx){ctx.globalAlpha=Math.max(0,1-(S.simT-f.t)/.14);ctx.strokeStyle=f.c;ctx.lineWidth=f.melee?4:2;ctx.beginPath();ctx.moveTo(f.x1,f.y1);ctx.lineTo(f.x2,f.y2);ctx.stroke();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(f.x2,f.y2,f.melee?9:4,0,7);ctx.fill()}ctx.globalAlpha=1;fx=fx.filter(f=>S.simT-f.t<.14);
+  drawFx();
   for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.l-=.04;if(p.l>0){ctx.globalAlpha=p.l;ctx.fillStyle=p.c;ctx.fillRect(p.x-2,p.y-2,4,4)}}
   ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;parts=parts.filter(p=>p.l>0);
   ctx.restore();
@@ -561,7 +587,7 @@ function loop(){
       if(performance.now()-t0>10){acc=Math.min(acc,1);break}
       acc--;snap();stepSim(S);if(S.tick%3===0)record();
       for(const h of S.hits){burst(h,"#ff3b3b",6);tone("sine",150,50,.15,.1)}
-      for(const sh of S.shots){if(!lowfx)fx.push({...sh,t:S.simT});sfxShot(sh)}
+      for(const sh of S.shots){if(sh.h){sh.h.aim=Math.atan2(sh.y2-sh.y1,sh.x2-sh.x1);sh.h.shotT=S.simT}fx.push({...sh,t:S.simT,h:null});sfxShot(sh)}
       for(const k of S.kills){if(k.zt==="tank"||k.zt==="boss")evs.push({t:S.simT,mi:S.marbles.indexOf(k),txt:k.zt==="boss"?"👑 Boss down!":"💀 Tank down!",col:"#ffd23f",w:k.zt==="boss"?8:5,k:"kill"});burst(k,"#9be36b",12);tone("sawtooth",160,50,.2,.07);if(k.zt==="tank"||k.zt==="boss"){burst(k,"#ffd23f",16);focusOn(k,"#ffd23f",k.zt==="boss"?"👑 Boss down!":"💀 Tank down!",1.1)}}
       for(const h of S.infected){evs.push({t:S.simT,mi:S.marbles.indexOf(h),txt:"🧟 "+TEAMS[h.team].n+(pick===h.team?" (you)":"")+" infected!",col:ZC,w:(pick===h.team?9:3)+(evs.some(e=>e.k==="inf")?0:3),k:"inf"});burst(h,ZC,18);tone("sawtooth",220,60,.35,.08);focusOn(h,ZC,"🧟 "+TEAMS[h.team].n+(pick===h.team?" (you)":"")+" infected!",pick===h.team?1.6:1);if(pick===h.team)flash=1;}
       for(const h of S.heals){burst(h,"#3ddc84",10);tone("triangle",400,900,.2,.08)}

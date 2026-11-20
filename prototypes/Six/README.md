@@ -1,16 +1,17 @@
 # Prototype Six: Zombie Marble Run (Matter.js)
 
-The only Matter.js build in the repo. It contains two single-file versions: the
-original game and the `marble-race.html` balance/visual variant. See
-`marble-race.md` for a detailed analysis of the variant.
+The only Matter.js build in the repo. It contains two single-file versions that
+are now nearly identical: the original game and `marble-race.html`, a faster
+cooldown tuning. See `marble-race.md` for the detailed comparison.
 
 ## Run
 
 Open either HTML file in a browser with internet access. Matter.js is loaded from
 cdnjs, so there is no build step.
 
-- `Zombie Marble Run.html` - original build.
-- `marble-race.html` - tracked variant with rebalanced weapons and new visuals.
+- `Zombie Marble Run.html` - original build, now with the rebalanced weapons,
+  infinite ammo, and richer visuals.
+- `marble-race.html` - the same build with faster weapon cooldowns.
 
 ## Features
 
@@ -18,8 +19,9 @@ cdnjs, so there is no build step.
 - 25 chunk families with five variants each, covering pegs, bumpers, spinners,
   crushers, gates, fans, magnets, portals, honey, crypts, lifts, launchers, and more.
 - Walkers, runners, tanks, and crypt bosses.
-- Five auto-firing weapons with range, damage, cooldown, knockback, and clips.
-- Crates for ammo, healing, or a weapon swap.
+- Five auto-firing weapons with range, damage, cooldown, and knockback; ammo is
+  unlimited.
+- Crates for healing or a weapon swap.
 - Five HP per marble; zombie contact damages, and zero HP turns the marble into a zombie.
 - Difficulty presets for 20, 30, or 40 zombies.
 - Manual seed, random seed, UTC daily seed, copy link, and URL hash seeds.
@@ -48,19 +50,21 @@ cdnjs, so there is no build step.
 
 ## The `marble-race.html` Variant
 
-This file was added outside the earlier committed work and is now tracked. It keeps
-the same Matter.js structure but changes balance and presentation:
+The variant was added outside the earlier committed work and is now tracked. Its
+balance and presentation changes were folded into the original build, so the two
+files are identical except for weapon cooldowns (variant values in parentheses):
 
-- Removes ammunition entirely: weapons never run out, clips are gone, and only
-  medkit and weapon-swap crates remain.
-- Rebalances all five weapons, including a faster pistol, stronger shotgun and bat,
-  faster sword, and longer-range rifle.
-- Draws the equipped weapon on each marble and shows a segmented HP ring instead of
-  separate HP pips plus an ammo ring.
-- Replaces simple shot lines with weapon-specific effects: pistol tracers, rifle
-  beams, shotgun pellets, melee arcs, and impact sparks.
-- Retains aim direction briefly after firing and updates the marble card, help text,
-  and pickup descriptions for unlimited ammo.
+| Weapon | Cooldown |
+| :--- | :--- |
+| Pistol | 1.0 s (0.8 s) |
+| Shotgun | 2.2 s (1.7 s) |
+| Bat | 1.8 s (1.4 s) |
+| Sword | 0.7 s (0.5 s) |
+| Rifle | 1.9 s (1.5 s) |
+
+Both builds remove ammo, draw the equipped weapon on each marble, show a
+segmented HP ring, use per-weapon shot effects, and retain aim briefly after
+firing.
 
 ## What Makes It Unique
 
@@ -69,8 +73,8 @@ the same Matter.js structure but changes balance and presentation:
 - The prediction/streak loop is unique to this prototype.
 - Optional Claude-hosted daily leaderboard and browser-local prediction stats.
 - Quality auto-degradation and low-FX toggles are built into the single file.
-- The variant is a compact experiment in removing ammo management and replacing it
-  with visible weapons and richer combat effects.
+- The two files are a compact experiment in removing ammo management and replacing
+  it with visible weapons and richer combat effects; only cooldown tuning differs.
 
 ## Notes
 
