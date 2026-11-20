@@ -9,7 +9,7 @@ Open either HTML file in a browser with internet access. Matter.js is loaded fro
 cdnjs, so there is no build step.
 
 - `Zombie Marble Run.html` - original build.
-- `marble-race.html` - untracked variant with rebalanced weapons and new visuals.
+- `marble-race.html` - tracked variant with rebalanced weapons and new visuals.
 
 ## Features
 
@@ -47,7 +47,7 @@ cdnjs, so there is no build step.
 
 ## The `marble-race.html` Variant
 
-This file was added outside the committed work and is currently untracked. It keeps
+This file was added outside the earlier committed work and is now tracked. It keeps
 the same Matter.js structure but changes balance and presentation:
 
 - Removes ammunition entirely: weapons never run out, clips are gone, and only
