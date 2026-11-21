@@ -45,7 +45,7 @@ export function draw(ctx, S, state, simT, width, height) {
   // Camera: follow the leading human marble
   const humansList = S.marbles.filter(m => m.team >= 0 && !m.fin && !m.zombie && !m.gone);
   if (humansList.length > 0) {
-    const ld = humansList.reduce((a, b) => b.prog > a.prog ? b : humansList[0]);
+    const ld = humansList.reduce((a, b) => b.prog > a.prog ? b : a);
     let cx = 0, cy = 0;
     humansList.forEach(m => {
       const p = m.rb.translation();

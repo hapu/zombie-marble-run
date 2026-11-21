@@ -32,6 +32,7 @@ required=(
   tests/physics-units.mjs
   tests/race-combat.mjs
   tests/target-filtering.mjs
+  tests/camera-follow.mjs
   tests/smoke.sh
   vendor/rapier.mjs
   vendor/LICENSE.rapier

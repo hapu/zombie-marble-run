@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Fixed the camera leader reduction and added a regression with a lower-progress racer after the leader in iteration order.
+- Result: The camera now remains focused on the highest-progress active human.
+
+## 2026-11-21
 - Change or experiment: Limited zombie pursuit and infection checks to living, unfinished human racers.
 - Result: Added a focused regression covering infected, finished, and gone racers as invalid targets while confirming a valid racer can still be pursued and hit.
 
