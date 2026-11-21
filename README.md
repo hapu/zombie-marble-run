@@ -23,7 +23,7 @@ network connection is required.
 ```bash
 bash scripts/check-words.sh   # context-file word budgets
 bash scripts/check-repo.sh    # required files, secrets, syntax, and links
-bash tests/smoke.sh           # repo checks, page/engine/bootstrap, offline build
+bash tests/smoke.sh           # repo checks, page/engine, offline build and startup
 ```
 
 ## Working with AI assistants

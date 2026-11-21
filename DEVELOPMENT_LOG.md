@@ -2,6 +2,10 @@
 
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
+## 2026-11-21
+- Change or experiment: Added an execution smoke test for the generated offline HTML using a minimal browser shim.
+- Result: The bundle initializes Rapier 0.21.0 and schedules the game loop; `bash tests/smoke.sh` passes.
+
 ## 2026-11-20
 - Change or experiment: Reviewed the active game, docs, tests, and build/serve workflow; added prioritized pre-port issues and recommendations to `TODO.md`.
 - Result: The backlog now calls out the broken offline module graph, a headless race with no combat, target filtering, ineffective seeds, camera selection, development-server exposure, multiplayer scope, and test-doc drift.

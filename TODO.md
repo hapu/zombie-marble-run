@@ -3,7 +3,7 @@
 Keep small; one active task. Each item should be verifiable.
 
 ## Now
-- [ ] Verify the generated offline page starts; smoke currently checks markers only
+- [x] Verify the generated offline page starts; smoke checks bundle initialization and game-loop scheduling
 
 ## Next
 - [ ] Make a normal race produce combat; tune zombie release/pursuit and weapon engagement, then assert outcomes in a repeatable race test

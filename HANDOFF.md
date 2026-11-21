@@ -2,12 +2,12 @@
 
 Keep under 300 words. Overwrite each session.
 
-- **Date / device / assistant:** 2026-11-19 / linux / opencode
-- **Branch / commit:** feature/repo-scaffold / `f4227f4` plus uncommitted changes
-- **Working tree:** dirty (template sync, repo checks, offline bundle fix)
-- **Done this session:** Pulled the SI physics and prioritized-port commits, merged the workshop-template workflow/context sync, added `scripts/check-repo.sh`, and fixed the offline bundle to include `src/physicsUnits.js`.
-- **Checks and exact results:** `bash scripts/check-words.sh` passes; `bash scripts/check-repo.sh` passes; `node tests/physics-units.mjs` passes; `bash tests/smoke.sh` passes; `python3 scripts/build-offline.py` wrote a 3359 KB bundle containing `PX_PER_METER`.
-- **Repro / verify command:** `bash scripts/check-words.sh && bash tests/smoke.sh`; optional `bash scripts/serve.sh`; optional `python3 scripts/build-offline.py`.
-- **Known problems / decisions needed:** Repeatable race may not produce combat; gameplay seed is ineffective; zombies may target infected/finished racers; leading-marble camera can be wrong; dev server exposes the repo on all interfaces; no prototype has networked multiplayer. The generated offline page still needs an execution check.
-- **Next step:** Verify the offline page starts, then establish a repeatable race with real combat before adding hazards or UI features.
+- **Date / device / assistant:** 2026-11-21 / linux / Copilot SDK
+- **Branch / base commit:** feature/repo-scaffold / `84b9ac1`
+- **Working tree:** Uncommitted offline startup smoke-test and documentation updates.
+- **Done this session:** Added a runtime check that executes the generated offline bundle, verifies Rapier initializes, and confirms the game loop is scheduled.
+- **Checks and exact results:** `bash scripts/check-words.sh`, `bash scripts/check-repo.sh`, and `bash tests/smoke.sh` pass; offline startup reports `rapier 0.21.0 ready`.
+- **Repro / verify command:** `bash scripts/check-words.sh && bash tests/smoke.sh`; optional `bash scripts/serve.sh`.
+- **Known problems / decisions needed:** Repeatable race may not produce combat; gameplay seed is ineffective; zombies may target infected/finished racers; leading-marble camera can be wrong; dev server exposes the repo on all interfaces; no prototype has networked multiplayer.
+- **Next step:** Make a normal race produce combat and assert its outcome in a repeatable test.
 - **Do not delete / assumptions:** Keep `prototypes/Six/marble-race.html`, `vendor/`, and the reference prototypes. Do not edit generated `dist/` or vendor files.

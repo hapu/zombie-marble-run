@@ -28,6 +28,7 @@ required=(
   scripts/check-repo.sh
   scripts/serve.sh
   scripts/build-offline.py
+  tests/offline-start.mjs
   tests/physics-units.mjs
   tests/smoke.sh
   vendor/rapier.mjs
