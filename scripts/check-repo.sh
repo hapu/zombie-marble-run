@@ -31,6 +31,7 @@ required=(
   tests/offline-start.mjs
   tests/physics-units.mjs
   tests/race-combat.mjs
+  tests/target-filtering.mjs
   tests/smoke.sh
   vendor/rapier.mjs
   vendor/LICENSE.rapier

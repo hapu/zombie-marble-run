@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Limited zombie pursuit and infection checks to living, unfinished human racers.
+- Result: Added a focused regression covering infected, finished, and gone racers as invalid targets while confirming a valid racer can still be pursued and hit.
+
+## 2026-11-21
 - Change or experiment: Reduced normal-difficulty zombie release delay from 3 seconds to 0.75 seconds and added a seeded 20-second race-combat regression test.
 - Result: The repeatable race produces weapon fire, zombie kills, hits, and infections; the prior 3-second delay produced no combat.
 

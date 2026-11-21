@@ -93,6 +93,10 @@ export function humans(S) {
   return S.marbles.filter(m => m.team >= 0);
 }
 
+function livingHumans(S) {
+  return S.marbles.filter(m => m.team >= 0 && !m.zombie && !m.gone && !m.fin);
+}
+
 function removeStatic(world, S, b) {
   if (!b) return;
   if (b.rb) world.removeRigidBody(b.rb);
@@ -151,7 +155,7 @@ export function stepSim(world, S, dt) {
 
   // Zombie chase
   if (S.zrel) {
-    const humansList = humans(S);
+    const humansList = livingHumans(S);
     for (const m of act) {
       if (!m.zombie || m.fin) continue;
       const position = m.rb.translation();
@@ -279,7 +283,7 @@ export function hurt(S, h) {
 export function checkCollisions(world, S) {
   // Simple overlap-based infection check
   const act = S.marbles.filter(m => !m.gone);
-  const humansList = humans(S);
+  const humansList = livingHumans(S);
   const zombies = act.filter(m => m.zombie);
   for (const z of zombies) {
     const zombiePosition = z.rb.translation();
