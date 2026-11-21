@@ -80,8 +80,8 @@ export function makeWorld(world, nz, seed, opts = {}) {
 
   const rnd = rngOf(seed);
   const obstacleRnd = rngOf(`${seed}:obstacles`);
-  // Top-down layouts work with gravity; the lift/wind content for bottom-up
-  // layouts is not ported yet.
+  const forceRnd = rngOf(`${seed}:forces`);
+  // Wind and lift zone accelerations are stored in SI units.
   const up = opts.up === true;
 
   const S = {
@@ -182,6 +182,37 @@ export function makeWorld(world, nz, seed, opts = {}) {
       S.zgate = rect(world, ox + 190, oy + 180, 14, 344, 0, null, S.statics);
     } else if (type === "F") {
       // Finish
+    } else if (type === "D2" || type === "U1") {
+      // Lift acceleration exceeds gravity so marbles rise through the zone.
+      S.zones.push({
+        t: "lift",
+        x: ox + 180,
+        y: oy + 180,
+        w: 112,
+        h: 344,
+        ax: 0,
+        ay: -12.5,
+      });
+    } else if (type === "U2") {
+      S.zones.push({
+        t: "lift",
+        x: ox + 180,
+        y: oy + 300,
+        w: 104,
+        h: 120,
+        ax: 0,
+        ay: -12.5,
+      });
+      S.zones.push({
+        t: "wind",
+        x: ox + 255,
+        y: oy + 170,
+        w: 220,
+        h: 300,
+        ax: 2,
+        ay: 0,
+        dir: mir ? -1 : 1,
+      });
     } else if (type === "H") {
       const x = (localX) => ox + (mir ? CS - localX : localX);
       const layout = obstacleRnd();
@@ -194,6 +225,19 @@ export function makeWorld(world, nz, seed, opts = {}) {
       } else if (layout < 0.4) {
         staticCirc(world, x(110), oy + 240, 20, "#ff5ea8", "bumper", S.statics);
         staticCirc(world, x(250), oy + 290, 20, "#ff5ea8", "bumper", S.statics);
+      }
+
+      if (forceRnd() < 0.18) {
+        S.zones.push({
+          t: "wind",
+          x: ox + CS / 2,
+          y: oy + CS / 2,
+          w: CS,
+          h: CS,
+          ax: 2,
+          ay: 0,
+          dir: mir ? -1 : 1,
+        });
       }
 
       if (rnd() < 0.25) {

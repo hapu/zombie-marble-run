@@ -6,6 +6,7 @@ Keep under 600 words. Update when the structure changes.
 Single-page browser game: one `index.html`, no build step, free/open-source libraries only.
 
 ## Components
+- Wind/lift zones in `src/world.js` store SI `ax`/`ay` accelerations; `src/entities.js` applies mass-scaled forces. `tests/zones.mjs` verifies horizontal wind and upward motion against gravity.
 - `index.html` — the page: canvas, status line, loads `src/main.js` as an ES module.
 - `src/main.js` — bootstrap: initializes Rapier2D, owns session lifecycle and the fixed 60 Hz accumulator loop, delegates world building and spawning to modules, and wires input, combat, and rendering.
 - `src/gameConfig.js` — shared non-Rapier constants for dimensions, teams, zombies, and weapons.

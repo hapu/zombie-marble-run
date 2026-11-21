@@ -141,6 +141,23 @@ export function stepSim(world, S, dt) {
     }
   }
 
+  for (const z of S.zones) {
+    if (z.t !== "wind" && z.t !== "lift") continue;
+    for (const m of act) {
+      if (m.fin) continue;
+      const position = m.rb.translation();
+      const mx = metersToPixels(position.x);
+      const my = metersToPixels(position.y);
+      if (Math.abs(mx - z.x) >= z.w / 2 || Math.abs(my - z.y) >= z.h / 2) continue;
+      const direction = z.t === "wind" ? (z.dir ?? 1) : 1;
+      const mass = m.rb.mass();
+      m.rb.addForce({
+        x: mass * (z.ax ?? 0) * direction,
+        y: mass * (z.ay ?? 0),
+      }, true);
+    }
+  }
+
   // Bleed off belt momentum
   for (const m of act) {
     if (m.fin || m._beltLast === undefined) continue;

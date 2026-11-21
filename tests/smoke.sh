@@ -51,6 +51,7 @@ node tests/serve-bind.mjs
 node tests/med-pickup.mjs
 node tests/ability-reset.mjs
 node tests/obstacles.mjs
+node tests/zones.mjs
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
 check dist/zombie-marble-run.html 'PX_PER_METER'
