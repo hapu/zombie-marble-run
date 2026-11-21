@@ -3,6 +3,14 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Audited static wall materials and mirrored rooftop wind, then reproduced a normal-race pile-up in a D2 landing.
+- Result: Applied the configured wall friction/restitution, mirrored U2 wind placement, and added a no-progress rescue that staggers racers toward the landing exit and records each rescue. A deterministic 45-second regression advances beyond the prior stall.
+
+## 2026-11-21
+- Change or experiment: Measured fixed-random easy/normal/hard races and found a normal race stalled at 62% progress from 30 through 180 seconds.
+- Result: Replaced the 240-second race cap with a tested 90-second limit; leave difficulty tuning open because sampled outcomes varied substantially.
+
+## 2026-11-21
 - Change or experiment: Added seeded horizontal wind and vertical landing/route lift zones; apply their m/s² accelerations through mass-scaled Rapier forces.
 - Result: The regression verifies wind displacement and upward lift motion against 9.81 m/s² gravity after one simulated second.
 

@@ -9,18 +9,23 @@ Keep small; one active task. Each item should be verifiable.
 - [x] Fix leading-marble camera selection so it consistently follows the highest-progress racer
 - [x] Limit the development server's network exposure; document trusted-LAN use
 
+## Now
+- [ ] Physics audit follow-up
+  - [x] Reset ability state and target per race
+  - [x] Apply static wall materials and mirror U2 wind placement
+  - [x] Rescue stalled D2 racers and record their landing positions
+  - [ ] Add broader headless physics assertions
+  - [ ] Render belts and weapon effects
+  - [ ] Restore obstacles and row-drop geometry
+- [ ] Balance difficulty and race length
+  - [x] Cap stalled races at 90 seconds and test the boundary
+  - [ ] Tune difficulty outcomes across repeatable race samples
+
 ## Next
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
   - [x] Add seeded medkit pickups with visible markers and healing behavior
   - [x] Port selected obstacle families with physics-scale tests
   - [x] Add wind and lift zones with tested SI force/motion tuning
-- [ ] Balance difficulty and race length
-- [ ] Physics audit follow-up
-  - [x] Reset ability state and target per race
-  - [ ] Add no-progress rescue and teleport diagnostics
-  - [ ] Render belts and weapon effects
-  - [ ] Restore obstacles and row-drop geometry
-  - [ ] Add headless physics assertions
 
 ## High priority prototype ports
 - [ ] Make races reproducible and configurable: seed all gameplay rolls, add manual/random/daily/shareable seeds, participant and patient-zero counts, difficulty settings, and per-race resets

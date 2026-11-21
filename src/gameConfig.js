@@ -6,6 +6,7 @@ export const ROWS = 5;
 export const COLS = 5;
 export const HP = 5;
 export const R = 9;
+export const RACE_TIME_LIMIT = 90;
 
 export const ZT = {
   walker: { r: 9, hp: 4, f: 1, v: 1.2, d: 0.002 },

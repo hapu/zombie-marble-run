@@ -34,7 +34,9 @@ function rect(world, x, y, w, h, angle = 0, col = null, statics = null) {
       .setRotation(angle),
   );
   world.createCollider(
-    RAPIER.ColliderDesc.cuboid(pixelsToMeters(w / 2), pixelsToMeters(h / 2)),
+    RAPIER.ColliderDesc.cuboid(pixelsToMeters(w / 2), pixelsToMeters(h / 2))
+      .setFriction(O.friction)
+      .setRestitution(O.restitution),
     rb,
   );
   const b = { rb, col, x, y, w, h, angle };
@@ -115,6 +117,7 @@ export function makeWorld(world, nz, seed, opts = {}) {
     kills: [],
     picks: [],
     dmg: {},
+    rescues: [],
     gate: null,
     zgate: null,
   };
@@ -205,7 +208,7 @@ export function makeWorld(world, nz, seed, opts = {}) {
       });
       S.zones.push({
         t: "wind",
-        x: ox + 255,
+        x: ox + (mir ? CS - 255 : 255),
         y: oy + 170,
         w: 220,
         h: 300,

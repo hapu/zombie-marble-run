@@ -1,7 +1,7 @@
 // Entity management: marbles, zombies, physics stepping.
 // Ported from prototype Two's makeWorld S.mk / stepSim logic.
 
-import { CS, HP, R, ZT, TEAMS, WEAPONS } from "./gameConfig.js";
+import { CS, HP, R, RACE_TIME_LIMIT, ZT, TEAMS, WEAPONS } from "./gameConfig.js";
 import { circ, O } from "./world.js";
 import { abilityStateTarget, abilityStateBoostUntil, abilityStateShieldUntil } from "./combat.js";
 import { metersToPixels, pixelsToMeters } from "./physicsUnits.js";
@@ -13,6 +13,8 @@ const BELT_SPEED = 140;
 const HITCD = 0.7;
 const ZR = 140;
 const ZF = 0.0002;
+const NO_PROGRESS_TIMEOUT = 8;
+const RESCUE_SPACING = 22;
 
 // Spawn player marbles at the start chunk.
 export function spawnMarbles(world, S) {
@@ -253,7 +255,7 @@ export function stepSim(world, S, dt) {
 
   // Check game end
   const hs = humans(S);
-  if (hs.every(h => h.fin || h.zombie) || S.simT > 240) {
+  if (hs.every(h => h.fin || h.zombie) || S.simT >= RACE_TIME_LIMIT) {
     S.gameOver = true;
   }
 }
@@ -284,6 +286,37 @@ function track(S, m) {
   m.ly = ly;
   m.prog = ri * CS + (cell.type === "D2" ? (lx + ly) / 2 : cell.type === "U2" ? (lx + CS - ly) / 2 : lx);
   if (S.tick % 20 === 0) m.safe = { x: px, y: py };
+
+  if (cell.type !== "D2" || m.team < 0 || m.zombie || m.fin) {
+    m._bestProgress = m.prog;
+    m._progressAt = S.simT;
+    return;
+  }
+  if (m._bestProgress === undefined || m.prog > m._bestProgress + 10) {
+    m._bestProgress = m.prog;
+    m._progressAt = S.simT;
+    return;
+  }
+  if (S.simT - m._progressAt < NO_PROGRESS_TIMEOUT) return;
+
+  const slot = Math.min(m.team, TEAMS.length - 1);
+  const direction = cell.mir ? -1 : 1;
+  const targetX = cell.ox + (cell.mir ? CS - R - 9 : R + 9) + direction * slot * RESCUE_SPACING;
+  const targetY = cell.oy + CS - 30;
+  m.rb.setTranslation({
+    x: pixelsToMeters(targetX),
+    y: pixelsToMeters(targetY),
+  }, true);
+  m.rb.setLinvel({ x: 0, y: 0 }, true);
+  S.rescues.push({
+    team: m.team,
+    ri,
+    at: S.simT,
+    from: { x: px, y: py },
+    to: { x: targetX, y: targetY },
+  });
+  m._bestProgress = m.prog;
+  m._progressAt = S.simT;
 }
 
 // Hurt a marble (infection on zombie touch).

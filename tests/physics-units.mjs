@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import RAPIER from "../vendor/rapier.mjs";
-import { circ, makeWorld } from "../src/world.js";
+import { circ, makeWorld, rect } from "../src/world.js";
 import {
   spawnMarbles,
   spawnZombies,
@@ -32,6 +32,11 @@ const marble = circ(world, 100, 200, 9, null, {
 assert.ok(Math.abs(marble.rb.translation().x - 2) < 1e-6);
 assert.ok(Math.abs(marble.rb.translation().y - 4) < 1e-6);
 assert.ok(Math.abs(marble.rb.mass() - Math.PI * 9 * 9 * 0.002) < 1e-4);
+
+const wall = rect(world, 20, 20, 30, 30);
+const wallMaterial = wall.rb.collider(0);
+assert.ok(Math.abs(wallMaterial.friction() - 0.02) < 1e-6);
+assert.ok(Math.abs(wallMaterial.restitution() - 0.25) < 1e-6);
 
 for (let i = 0; i < PHYSICS_HZ; i++) world.step();
 const fallPx = metersToPixels(marble.rb.translation().y - 4);

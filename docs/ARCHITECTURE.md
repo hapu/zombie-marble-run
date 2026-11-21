@@ -6,7 +6,9 @@ Keep under 600 words. Update when the structure changes.
 Single-page browser game: one `index.html`, no build step, free/open-source libraries only.
 
 ## Components
-- Wind/lift zones in `src/world.js` store SI `ax`/`ay` accelerations; `src/entities.js` applies mass-scaled forces. `tests/zones.mjs` verifies horizontal wind and upward motion against gravity.
+- `RACE_TIME_LIMIT` in `src/gameConfig.js` caps stalled races at 90 seconds; `tests/race-time-limit.mjs` checks the boundary.
+- Static rectangles in `src/world.js` apply configured friction/restitution; mirrored rooftop wind zones follow their chunk. Wind/lift zones store SI `ax`/`ay` accelerations, applied as mass-scaled forces in `src/entities.js`; `tests/zones.mjs` verifies placement and motion.
+- `src/entities.js` detects stalled racers in D2 landings, staggers them toward the exit, and records rescue positions in `S.rescues`; `tests/d2-stall.mjs` exercises the deterministic pile-up.
 - `index.html` — the page: canvas, status line, loads `src/main.js` as an ES module.
 - `src/main.js` — bootstrap: initializes Rapier2D, owns session lifecycle and the fixed 60 Hz accumulator loop, delegates world building and spawning to modules, and wires input, combat, and rendering.
 - `src/gameConfig.js` — shared non-Rapier constants for dimensions, teams, zombies, and weapons.
@@ -21,6 +23,7 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `assets/` — shared sprites and audio.
 - `scripts/serve.sh` — static dev server (`python3 -m http.server`), loopback-only by default; `--lan` opts into all interfaces.
 - `tests/physics-units.mjs` — Node assertions for the SI contract, marble mass, gravity, and a five-second race simulation.
+- `tests/d2-stall.mjs` — verifies the repeatable D2 landing stall is rescued and recorded.
 - `tests/med-pickup.mjs` — verifies deterministic medkit placement, healing, and single collection.
 - `tests/obstacles.mjs` — verifies seeded peg/bumper placement, pixel-to-meter positions, and bumper collision.
 - `tests/smoke.sh` — serves the repo, runs repo checks and SI assertions, and checks the page, engine, bootstrap, and offline build.

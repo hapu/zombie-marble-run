@@ -19,6 +19,23 @@ try {
   routeWorld.free();
 }
 
+const mirroredWorld = new RAPIER.World({ x: 0, y: GRAVITY_MPS2 });
+try {
+  const race = makeWorld(mirroredWorld, 0, "mirrored-wind-regression", {
+    diff: "normal",
+    up: true,
+  });
+  const cell = race.route.find(routeCell => routeCell.type === "U2" && routeCell.mir);
+  assert.ok(cell, "upward route should include a mirrored rooftop chunk");
+  const zone = race.zones.find(
+    candidate => candidate.t === "wind" && candidate.y === cell.oy + 170 && candidate.w === 220,
+  );
+  assert.ok(zone, "mirrored rooftop should include a wind zone");
+  assert.equal(zone.x, cell.ox + race.CS - 255, "wind zone center should mirror with the chunk");
+} finally {
+  mirroredWorld.free();
+}
+
 function runZone(zone, gravity) {
   const world = new RAPIER.World({ x: 0, y: gravity });
   world.timestep = 1 / PHYSICS_HZ;
