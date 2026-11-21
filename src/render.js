@@ -96,6 +96,20 @@ export function draw(ctx, S, state, simT, width, height) {
     ctx.restore();
   }
 
+  for (const pickup of S.pickups) {
+    if (pickup.taken || !inv(pickup.x, pickup.y, pickup.r)) continue;
+    ctx.beginPath();
+    ctx.arc(pickup.x, pickup.y, pickup.r, 0, Math.PI * 2);
+    ctx.fillStyle = "#35b86b";
+    ctx.fill();
+    ctx.strokeStyle = "#d8ffe2";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(pickup.x - 2, pickup.y - 7, 4, 14);
+    ctx.fillRect(pickup.x - 7, pickup.y - 2, 14, 4);
+  }
+
   // Draw marbles and zombies
   for (const m of S.marbles) {
     if (m.gone) continue;

@@ -89,6 +89,7 @@ export function makeWorld(world, nz, seed, opts = {}) {
     zones: [],
     marbles: [],
     zombies: [],
+    pickups: [],
     route: [],
     grid: [],
     hits: [],
@@ -165,6 +166,15 @@ export function makeWorld(world, nz, seed, opts = {}) {
       S.zgate = rect(world, ox + 190, oy + 180, 14, 344, 0, null, S.statics);
     } else if (type === "F") {
       // Finish
+    } else if (type === "H" && rnd() < 0.25) {
+      S.pickups.push({
+        kind: "med",
+        x: ox + CS / 2,
+        y: oy + CS - 18,
+        r: 13,
+        amount: 2,
+        taken: false,
+      });
     }
     // Belt zones (mirrored rows push the opposite way)
     S.zones.push({ t: "belt", x: ox + CS / 2, y: oy + CS - 45, w: CS, h: 90, f: 1, dir: cell.mir ? -1 : 1 });

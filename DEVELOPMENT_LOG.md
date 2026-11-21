@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Added seeded medkit pickups to selected ordinary track chunks, with collision collection, up-to-two-HP healing, and a visible marker.
+- Result: A deterministic regression confirms placement, healing, and one-time consumption. Other pickup types, obstacle families, and wind/lift remain unported.
+
+## 2026-11-21
 - Change or experiment: Changed the development server to bind to loopback by default and made all-interface LAN serving an explicit `--lan` opt-in.
 - Result: Added command-argument regression checks and documented that LAN mode serves the repository without authentication and is for trusted, firewalled networks only.
 

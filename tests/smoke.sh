@@ -48,6 +48,7 @@ node tests/race-combat.mjs
 node tests/target-filtering.mjs
 node tests/camera-follow.mjs
 node tests/serve-bind.mjs
+node tests/med-pickup.mjs
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
 check dist/zombie-marble-run.html 'PX_PER_METER'

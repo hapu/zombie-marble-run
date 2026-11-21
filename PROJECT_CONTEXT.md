@@ -24,4 +24,4 @@ Consolidate six prototype webpage games into a single-page browser game.
 ## Current state
 - What exists: Six analyzed prototypes (`One`, `Two`, `Four`, `Six`, `Seven`, `Eight`) plus a vanilla JS + canvas, vendored Rapier2D 0.21.0 (Apache-2.0) single-page implementation.
 - What runs: The shared game has the Two-based race loop and flat-belt content. Rapier uses SI units behind a 50 px/m conversion boundary; gameplay and rendering remain pixel-based. Physics and rendering are separated into modules, and `scripts/build-offline.py` creates a one-file offline build.
-- What is missing: Effective gameplay seeds, remaining chunk content, audio, replay, map, leaderboard, and multiplayer. See `TODO.md`.
+- What is missing: Effective gameplay seeds, obstacle/wind/lift content, additional pickup types, audio, replay, map, leaderboard, and multiplayer. See `TODO.md`.

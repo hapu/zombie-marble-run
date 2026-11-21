@@ -220,6 +220,20 @@ export function stepSim(world, S, dt) {
     }
   }
 
+  for (const pickup of S.pickups) {
+    if (pickup.taken) continue;
+    for (const h of livingHumans(S)) {
+      const position = h.rb.translation();
+      const hx = metersToPixels(position.x);
+      const hy = metersToPixels(position.y);
+      if (Math.hypot(hx - pickup.x, hy - pickup.y) >= (h.rad || R) + pickup.r) continue;
+      pickup.taken = true;
+      h.hp = Math.min(HP, h.hp + pickup.amount);
+      S.picks.push({ m: h, kind: pickup.kind });
+      break;
+    }
+  }
+
   // Check game end
   const hs = humans(S);
   if (hs.every(h => h.fin || h.zombie) || S.simT > 240) {

@@ -36,7 +36,7 @@ const racers = [
   },
 }));
 
-draw(ctx, { route: [], statics: [], marbles: racers }, "racing", 0, 560, 560);
+draw(ctx, { route: [], statics: [], pickups: [], marbles: racers }, "racing", 0, 560, 560);
 
 const averageX = racers.reduce((sum, racer) => sum + racer.position.x, 0) / racers.length;
 const averageY = racers.reduce((sum, racer) => sum + racer.position.y, 0) / racers.length;

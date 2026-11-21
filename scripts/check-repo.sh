@@ -34,6 +34,7 @@ required=(
   tests/target-filtering.mjs
   tests/camera-follow.mjs
   tests/serve-bind.mjs
+  tests/med-pickup.mjs
   tests/smoke.sh
   vendor/rapier.mjs
   vendor/LICENSE.rapier
