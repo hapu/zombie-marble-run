@@ -44,7 +44,7 @@ check index.html 'id="game"'
 check vendor/rapier.mjs 'WebAssembly'
 check src/main.js 'new RAPIER.World'
 node tests/physics-units.mjs
-
+node tests/race-combat.mjs
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
 check dist/zombie-marble-run.html 'PX_PER_METER'

@@ -30,6 +30,7 @@ required=(
   scripts/build-offline.py
   tests/offline-start.mjs
   tests/physics-units.mjs
+  tests/race-combat.mjs
   tests/smoke.sh
   vendor/rapier.mjs
   vendor/LICENSE.rapier

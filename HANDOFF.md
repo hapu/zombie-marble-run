@@ -3,11 +3,11 @@
 Keep under 300 words. Overwrite each session.
 
 - **Date / device / assistant:** 2026-11-21 / linux / Copilot SDK
-- **Branch / base commit:** feature/repo-scaffold / `84b9ac1`
-- **Working tree:** Uncommitted offline startup smoke-test and documentation updates.
-- **Done this session:** Added a runtime check that executes the generated offline bundle, verifies Rapier initializes, and confirms the game loop is scheduled.
-- **Checks and exact results:** `bash scripts/check-words.sh`, `bash scripts/check-repo.sh`, and `bash tests/smoke.sh` pass; offline startup reports `rapier 0.21.0 ready`.
-- **Repro / verify command:** `bash scripts/check-words.sh && bash tests/smoke.sh`; optional `bash scripts/serve.sh`.
-- **Known problems / decisions needed:** Repeatable race may not produce combat; gameplay seed is ineffective; zombies may target infected/finished racers; leading-marble camera can be wrong; dev server exposes the repo on all interfaces; no prototype has networked multiplayer.
-- **Next step:** Make a normal race produce combat and assert its outcome in a repeatable test.
+- **Branch / base commit:** feature/repo-scaffold / `2ec403f`
+- **Working tree:** Uncommitted combat tuning, regression test, and handoff updates.
+- **Done this session:** Committed and pushed the offline-startup smoke test. Reduced normal zombie release delay to 0.75 seconds and added a repeatable 20-second race test for shots, kills, hits, and infections.
+- **Checks and exact results:** `bash scripts/check-words.sh && bash scripts/check-repo.sh && bash tests/smoke.sh` passes, including `ok normal race produces combat` and offline startup (`rapier 0.21.0 ready`).
+- **Repro / verify command:** `bash scripts/check-words.sh && bash scripts/check-repo.sh && bash tests/smoke.sh`.
+- **Known problems / decisions needed:** Gameplay seed is ineffective; zombies may target infected/finished racers; leading-marble camera can be wrong; dev server exposes the repo on all interfaces; no prototype has networked multiplayer.
+- **Next step:** Restrict zombie pursuit and infection collisions to living, unfinished humans.
 - **Do not delete / assumptions:** Keep `prototypes/Six/marble-race.html`, `vendor/`, and the reference prototypes. Do not edit generated `dist/` or vendor files.

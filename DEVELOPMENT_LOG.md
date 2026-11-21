@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Reduced normal-difficulty zombie release delay from 3 seconds to 0.75 seconds and added a seeded 20-second race-combat regression test.
+- Result: The repeatable race produces weapon fire, zombie kills, hits, and infections; the prior 3-second delay produced no combat.
+
+## 2026-11-21
 - Change or experiment: Added an execution smoke test for the generated offline HTML using a minimal browser shim.
 - Result: The bundle initializes Rapier 0.21.0 and schedules the game loop; `bash tests/smoke.sh` passes.
 

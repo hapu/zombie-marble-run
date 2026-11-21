@@ -4,9 +4,9 @@ Keep small; one active task. Each item should be verifiable.
 
 ## Now
 - [x] Verify the generated offline page starts; smoke checks bundle initialization and game-loop scheduling
+- [x] Make a normal race produce combat; tune zombie release and assert repeatable shots, kills, hits, and infections
 
 ## Next
-- [ ] Make a normal race produce combat; tune zombie release/pursuit and weapon engagement, then assert outcomes in a repeatable race test
 - [ ] Restrict zombie pursuit and infection collisions to living, unfinished humans
 - [ ] Fix leading-marble camera selection so it consistently follows the highest-progress racer
 - [ ] Limit the development server's network exposure or serve only a safe build directory; document trusted-LAN use
