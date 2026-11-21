@@ -90,7 +90,11 @@ export function draw(ctx, S, state, simT, width, height) {
     ctx.strokeStyle = b.col || "#7a8296";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.rect(-b.w / 2, -b.h / 2, b.w, b.h);
+    if (b.rad !== undefined) {
+      ctx.arc(0, 0, b.rad, 0, Math.PI * 2);
+    } else {
+      ctx.rect(-b.w / 2, -b.h / 2, b.w, b.h);
+    }
     ctx.fill();
     ctx.stroke();
     ctx.restore();

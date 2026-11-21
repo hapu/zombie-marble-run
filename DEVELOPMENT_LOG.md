@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Ported sparse static peg rows and lone/pair spring bumpers into ordinary course chunks.
+- Result: Seeded layouts preserve medkit placement; a Rapier integration regression verifies pixel-to-meter placement and bumper bounce. The smoke marker check now consumes each HTTP response fully to avoid intermittent pipe failures.
+
+## 2026-11-21
 - Change or experiment: Reset ability target, active timers, and cooldowns when creating a race.
 - Result: Added a focused regression proving boost, shield, and heal are available again after resetting between races.
 

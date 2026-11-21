@@ -32,7 +32,7 @@ bash scripts/check-repo.sh || fail=1
 
 check() {
   local path="$1" marker="$2"
-  if curl -fsS "http://127.0.0.1:$port/$path" | grep -q "$marker"; then
+  if curl -fsS "http://127.0.0.1:$port/$path" | grep -F "$marker" >/dev/null; then
     echo "ok    $path"
   else
     echo "FAIL  $path"
@@ -50,6 +50,7 @@ node tests/camera-follow.mjs
 node tests/serve-bind.mjs
 node tests/med-pickup.mjs
 node tests/ability-reset.mjs
+node tests/obstacles.mjs
 python3 scripts/build-offline.py >/tmp/zombie-build.log
 check dist/zombie-marble-run.html 'const RAPIER = globalThis.__RAPIER__'
 check dist/zombie-marble-run.html 'PX_PER_METER'

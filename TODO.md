@@ -12,7 +12,7 @@ Keep small; one active task. Each item should be verifiable.
 ## Next
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
   - [x] Add seeded medkit pickups with visible markers and healing behavior
-  - [ ] Port selected obstacle families with physics-scale tests
+  - [x] Port selected obstacle families with physics-scale tests
   - [ ] Add wind and lift zones with tested SI force/motion tuning
 - [ ] Balance difficulty and race length
 - [ ] Physics audit follow-up

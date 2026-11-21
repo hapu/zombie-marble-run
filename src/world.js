@@ -42,6 +42,21 @@ function rect(world, x, y, w, h, angle = 0, col = null, statics = null) {
   return b;
 }
 
+function staticCirc(world, x, y, rad, col, kind, statics) {
+  const rb = world.createRigidBody(
+    RAPIER.RigidBodyDesc.fixed().setTranslation(pixelsToMeters(x), pixelsToMeters(y)),
+  );
+  world.createCollider(
+    RAPIER.ColliderDesc.ball(pixelsToMeters(rad))
+      .setRestitution(kind === "bumper" ? 1.15 : 0.25)
+      .setFriction(0.02),
+    rb,
+  );
+  const b = { rb, col, x, y, rad, kind };
+  statics.push(b);
+  return b;
+}
+
 function circ(world, x, y, rad, col = null, opts = {}) {
   const rb = world.createRigidBody(
     RAPIER.RigidBodyDesc.dynamic()
@@ -64,6 +79,7 @@ export function makeWorld(world, nz, seed, opts = {}) {
   nz = Math.round(nz * D.n);
 
   const rnd = rngOf(seed);
+  const obstacleRnd = rngOf(`${seed}:obstacles`);
   // Top-down layouts work with gravity; the lift/wind content for bottom-up
   // layouts is not ported yet.
   const up = opts.up === true;
@@ -133,7 +149,7 @@ export function makeWorld(world, nz, seed, opts = {}) {
 
   // Build each chunk: walls + obstacles
   S.route.forEach((cell) => {
-    const { ox, oy, type, conn, c } = cell;
+    const { ox, oy, type, conn, c, mir } = cell;
 
     // Walls (shared boundaries built once)
     for (const [y, k, on] of [[oy + CS, "b", 1], [oy, "t", cell.gy === 0]]) {
@@ -166,15 +182,30 @@ export function makeWorld(world, nz, seed, opts = {}) {
       S.zgate = rect(world, ox + 190, oy + 180, 14, 344, 0, null, S.statics);
     } else if (type === "F") {
       // Finish
-    } else if (type === "H" && rnd() < 0.25) {
-      S.pickups.push({
-        kind: "med",
-        x: ox + CS / 2,
-        y: oy + CS - 18,
-        r: 13,
-        amount: 2,
-        taken: false,
-      });
+    } else if (type === "H") {
+      const x = (localX) => ox + (mir ? CS - localX : localX);
+      const layout = obstacleRnd();
+      if (layout < 0.16) {
+        for (let localX = 50; localX < 340; localX += 50) {
+          staticCirc(world, x(localX), oy + 300, 7, "#9aa4bd", "peg", S.statics);
+        }
+      } else if (layout < 0.28) {
+        staticCirc(world, x(180), oy + 255, 26, "#ff5ea8", "bumper", S.statics);
+      } else if (layout < 0.4) {
+        staticCirc(world, x(110), oy + 240, 20, "#ff5ea8", "bumper", S.statics);
+        staticCirc(world, x(250), oy + 290, 20, "#ff5ea8", "bumper", S.statics);
+      }
+
+      if (rnd() < 0.25) {
+        S.pickups.push({
+          kind: "med",
+          x: ox + CS / 2,
+          y: oy + CS - 18,
+          r: 13,
+          amount: 2,
+          taken: false,
+        });
+      }
     }
     // Belt zones (mirrored rows push the opposite way)
     S.zones.push({ t: "belt", x: ox + CS / 2, y: oy + CS - 45, w: CS, h: 90, f: 1, dir: cell.mir ? -1 : 1 });

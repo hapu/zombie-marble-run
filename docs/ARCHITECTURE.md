@@ -10,8 +10,8 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `src/main.js` — bootstrap: initializes Rapier2D, owns session lifecycle and the fixed 60 Hz accumulator loop, delegates world building and spawning to modules, and wires input, combat, and rendering.
 - `src/gameConfig.js` — shared non-Rapier constants for dimensions, teams, zombies, and weapons.
 - `src/physicsUnits.js` — SI physics contract: Rapier uses meters and seconds; 50 px = 1 m. Game and renderer values stay in pixels and are converted at Rapier reads/writes.
-- `src/world.js` / `src/entities.js` / `src/combat.js` — physics and simulation modules; they may import Rapier and create or mutate bodies. The world creates seeded medkit pickups; entities collect and apply them.
-- `src/render.js` — canvas-only presentation; it reads simulation state, including pickup markers, but must not import Rapier or mutate physics bodies.
+- `src/world.js` / `src/entities.js` / `src/combat.js` — physics and simulation modules; they may import Rapier and create or mutate bodies. The world creates seeded medkit pickups and static peg/bumper obstacles; entities collect and apply pickups.
+- `src/render.js` — canvas-only presentation; it reads simulation state, including pickup markers and static circle obstacles, but must not import Rapier or mutate physics bodies.
 - `src/input.js` — keyboard and pointer controls for start/reset, abilities, and restart; no physics dependency.
 - `scripts/build-offline.py` — dependency-free bundler that inlines the HTML, source modules, assets, and vendored Rapier engine into `dist/zombie-marble-run.html`.
 - `scripts/check-repo.sh` — checks required context files, tracked secrets, shell syntax, and local Markdown links.
@@ -21,6 +21,7 @@ Single-page browser game: one `index.html`, no build step, free/open-source libr
 - `scripts/serve.sh` — static dev server (`python3 -m http.server`), loopback-only by default; `--lan` opts into all interfaces.
 - `tests/physics-units.mjs` — Node assertions for the SI contract, marble mass, gravity, and a five-second race simulation.
 - `tests/med-pickup.mjs` — verifies deterministic medkit placement, healing, and single collection.
+- `tests/obstacles.mjs` — verifies seeded peg/bumper placement, pixel-to-meter positions, and bumper collision.
 - `tests/smoke.sh` — serves the repo, runs repo checks and SI assertions, and checks the page, engine, bootstrap, and offline build.
 
 ## Data flow
