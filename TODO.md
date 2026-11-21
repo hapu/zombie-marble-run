@@ -16,7 +16,7 @@ Keep small; one active task. Each item should be verifiable.
   - [ ] Add wind and lift zones with tested SI force/motion tuning
 - [ ] Balance difficulty and race length
 - [ ] Physics audit follow-up
-  - [ ] Reset ability state and target per race
+  - [x] Reset ability state and target per race
   - [ ] Add no-progress rescue and teleport diagnostics
   - [ ] Render belts and weapon effects
   - [ ] Restore obstacles and row-drop geometry

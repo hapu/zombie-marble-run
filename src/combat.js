@@ -15,6 +15,15 @@ export function abilityStateTarget() { return abilityTarget; }
 export function abilityStateBoostUntil() { return abilityBoostUntil; }
 export function abilityStateShieldUntil() { return abilityShieldUntil; }
 
+export function resetAbilityState() {
+  abilityTarget = null;
+  abilityBoostUntil = 0;
+  abilityShieldUntil = 0;
+  abilityBoostReady = 0;
+  abilityShieldReady = 0;
+  abilityHealReady = 0;
+}
+
 // Auto-fire weapons for human marbles against nearby zombies.
 export function combatStep(S, dt) {
   if (!S.zrel) return;

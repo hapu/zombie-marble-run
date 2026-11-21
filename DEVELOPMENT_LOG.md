@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Reset ability target, active timers, and cooldowns when creating a race.
+- Result: Added a focused regression proving boost, shield, and heal are available again after resetting between races.
+
+## 2026-11-21
 - Change or experiment: Added seeded medkit pickups to selected ordinary track chunks, with collision collection, up-to-two-HP healing, and a visible marker.
 - Result: A deterministic regression confirms placement, healing, and one-time consumption. Other pickup types, obstacle families, and wind/lift remain unported.
 

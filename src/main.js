@@ -4,7 +4,7 @@ import {
   spawnMarbles, spawnZombies, stepSim, checkCollisions,
 } from "./entities.js";
 import {
-  combatStep, useAbility, updateAbilityTarget,
+  combatStep, resetAbilityState, useAbility, updateAbilityTarget,
 } from "./combat.js";
 import {
   draw, resize,
@@ -58,6 +58,7 @@ function startGame() {
           state = "racing";
           simT = 0;
           accumulator = 0;
+          resetAbilityState();
           S = makeWorld(world, 30, "seed", { diff: "normal" });
           spawnMarbles(world, S);
           spawnZombies(world, S);
