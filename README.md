@@ -6,9 +6,13 @@ Read `PROJECT_CONTEXT.md` for the goal and `docs/ARCHITECTURE.md` for the struct
 
 ## Run
 ```bash
-bash scripts/serve.sh        # http://localhost:8000/
+bash scripts/serve.sh        # local only: http://127.0.0.1:8000/
 ```
-On a phone or another device, open this machine's LAN IP on the same port.
+
+To test on another device, explicitly opt in on a trusted, firewalled LAN:
+`bash scripts/serve.sh --lan [port]`. This exposes the entire repository tree without
+authentication on all network interfaces. Do not use it on public or untrusted networks
+or forward its port to the internet.
 
 ## Build one-file offline HTML
 ```bash

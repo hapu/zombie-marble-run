@@ -6,10 +6,10 @@ Keep small; one active task. Each item should be verifiable.
 - [x] Verify the generated offline page starts; smoke checks bundle initialization and game-loop scheduling
 - [x] Make a normal race produce combat; tune zombie release and assert repeatable shots, kills, hits, and infections
 - [x] Restrict zombie pursuit and infection collisions to living, unfinished humans
+- [x] Fix leading-marble camera selection so it consistently follows the highest-progress racer
+- [x] Limit the development server's network exposure; document trusted-LAN use
 
 ## Next
-- [x] Fix leading-marble camera selection so it consistently follows the highest-progress racer
-- [ ] Limit the development server's network exposure or serve only a safe build directory; document trusted-LAN use
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)
 - [ ] Balance difficulty and race length
 - [ ] Physics audit follow-up

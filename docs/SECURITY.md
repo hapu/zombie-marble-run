@@ -12,6 +12,10 @@
 - Use a separate SSH key or GitHub fine-grained token for the Chromebook and the phone so each can be revoked alone.
 - Scope tokens to the needed repos with minimal permissions.
 
+## Development server
+- `bash scripts/serve.sh` binds to `127.0.0.1` by default.
+- `bash scripts/serve.sh --lan [port]` is an explicit opt-in that binds to all interfaces and serves the repository tree without authentication. Use only on a trusted, firewalled LAN; never expose or forward it to public or untrusted networks.
+
 ## Gateways
 - Require authentication on any LiteLLM or similar gateway.
 - Never expose an unauthenticated gateway to the public internet.

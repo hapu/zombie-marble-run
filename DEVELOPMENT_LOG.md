@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Changed the development server to bind to loopback by default and made all-interface LAN serving an explicit `--lan` opt-in.
+- Result: Added command-argument regression checks and documented that LAN mode serves the repository without authentication and is for trusted, firewalled networks only.
+
+## 2026-11-21
 - Change or experiment: Fixed the camera leader reduction and added a regression with a lower-progress racer after the leader in iteration order.
 - Result: The camera now remains focused on the highest-progress active human.
 
