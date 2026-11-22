@@ -14,7 +14,7 @@ Keep small; one active task. Each item should be verifiable.
   - [x] Reset ability state and target per race
   - [x] Apply static wall materials and mirror U2 wind placement
   - [x] Rescue stalled D2 racers and record their landing positions
-  - [ ] Add broader headless physics assertions
+  - [x] Add broader headless physics assertions
   - [ ] Render belts and weapon effects
   - [ ] Restore obstacles and row-drop geometry
 - [ ] Balance difficulty and race length

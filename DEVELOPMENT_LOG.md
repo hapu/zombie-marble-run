@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Added headless physics regressions for the force-reset fix, belt behavior, and course containment.
+- Result: New `tests/physics-regressions.mjs` proves zone forces clear on exit, belts reach their configured speed and bleed momentum, and every body stays inside the 5x5 course through a seeded 30-second race. Wired into `tests/smoke.sh`; full smoke passes.
+
+## 2026-11-21
 - Change or experiment: Diagnosed marbles being pushed into the right wall. Rapier `addForce` persists across steps until `resetForces`, but wind, lift, and zombie-chase forces were never cleared, so they accumulated every step and overwhelmed the velocity cap. Also found the zombie speed cap was slower than the human cap.
 - Result: Reset each active body's forces at the start of every step before reapplying zone/chase forces; matched prototype Two's zombie cap (`VMAX * zv`). Added per-step force assertions to the zone test and rewrote the D2 rescue test to synthesize a stall, since the runaway forces were the original stall cause. Full smoke passes.
 

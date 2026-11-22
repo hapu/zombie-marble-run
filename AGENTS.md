@@ -1,33 +1,35 @@
 # AGENTS.md
 
-Instructions for AI coding agents. Keep under 500 words.
+Instructions for AI coding agents. Keep under 500 words (`scripts/check-words.sh` enforces).
 
-## Environment & Commands
-- **Host:** 4GB RAM Linux CLI. Keep builds, tests, and terminal outputs minimal.
-- **Stack:** Vanilla JS (ES modules), HTML5 Canvas, vendored Rapier2D 0.21.0 (Apache-2.0), Python 3 static server; no build step.
-- **Test / Lint:** `bash scripts/check-words.sh && bash tests/smoke.sh`
-- **Build:** `python3 scripts/build-offline.py`
+## Environment
+- 4 GB RAM Linux CLI. Keep commands, logs, and context small; pipe verbose output to `/tmp/` and tail it.
+- Vanilla JS ES modules + HTML5 Canvas, vendored Rapier2D 0.21.0 (`vendor/rapier.mjs`, Apache-2.0), Python 3 server. No package manager or dev build step.
+- Node runs the headless tests; there is no `npm install`. `dist/zombie-marble-run.html` is generated but tracked in git (despite `.gitignore`).
 
-## Before changing anything
-1. Inspect the repo and working tree (`git status --short --branch`, `git log --oneline -5`).
-2. Read `PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`, `docs/WORKFLOW.md`, and `WORKSHOP.md`.
-3. Verify existing work; never assume a prior assistant's summary is correct.
-4. Verify provider, tool, and API facts from official docs if they may have changed.
-5. Explain the plan briefly before any multi-file or structural change.
+## Commands
+- Full check: `bash scripts/check-words.sh && bash tests/smoke.sh`
+- Single test: `node tests/<name>.mjs` (prefer this while iterating; the smoke suite runs long simulations)
+- Dev server: `bash scripts/serve.sh` (loopback only). `--lan` exposes the whole repo unauthenticated on all interfaces.
+- Offline build: `python3 scripts/build-offline.py` -> self-contained `dist/zombie-marble-run.html`.
+- `tests/smoke.sh` rebuilds `dist/` as a side effect, so the tree can change after a check.
+
+## Read first
+`PROJECT_CONTEXT.md`, `HANDOFF.md`, `TODO.md`; then `docs/ARCHITECTURE.md` and `docs/WORKFLOW.md` when touching structure or process. Verify the actual files; never trust a prior assistant's summary.
+
+## Repo-specific gotchas
+- Physics uses SI at the Rapier boundary: 50 px = 1 m, 9.81 m/s², fixed 60 Hz, 6 solver iterations, 4 CCD substeps. Keep gameplay/render values in pixels and convert via `src/physicsUnits.js`.
+- Rapier `addForce` persists across steps until `resetForces`. `src/entities.js` resets every active body each step; apply zone/chase forces per step, not once and forget.
+- `src/render.js` must not import Rapier or mutate physics; it only reads simulation state.
+- New files need explicit wiring: `scripts/build-offline.py` has a hardcoded `src/` module list, `tests/smoke.sh` a fixed test list, and `scripts/check-repo.sh` a required-file list. Update the relevant one or the file is silently ignored.
+- `prototypes/` are reference sources; copy needed code into `src/` instead of editing them. Do not edit `vendor/`.
+- Context docs have enforced word budgets (`AGENTS.md` 500, `HANDOFF.md` 300, `TODO.md` 500, etc.); run `check-words.sh` after editing them.
 
 ## Rules
-- **Branching:** Never commit directly to `main`. Use feature branches (`feature/<topic>`, `fix/<topic>`) with small, atomic commits; commit or push only when explicitly asked.
-- **Output Discipline:** Pipe verbose logs to `/tmp/` or tail the last 20 lines (`| tail -n 20`) to prevent context and RAM bloat.
-- **Safety:** Never delete existing work, install new dependencies, use paid APIs, or expose/commit credentials without explicit approval.
-- **Scope:** Stay provider-agnostic. Do not invent quotas, capabilities, or compatibility claims.
-- **Editing boundaries:** Do not modify `vendor/`, `prototypes/`, or generated `dist/` output unless the task requires it.
-- **Docs:** Update docs when behavior or decisions change; do not leave stale paths or commands.
+- Never commit to `main`; use short-lived `feature/<topic>` or `fix/<topic>` branches. Commit/push only when explicitly asked; never force-push.
+- Do not add dependencies, use paid APIs, delete existing work, or commit secrets without approval.
+- Explain the plan before multi-file or structural changes.
+- Update `HANDOFF.md` (and `DEVELOPMENT_LOG.md` for notable work) when behavior or decisions change.
 
-## When you finish, report
-- Files changed (what and why).
-- Checks/tests run and exact results.
-- Known limitations, blockers, or decisions needed.
-- Branch, commit hash, and working-tree state.
-- Next recommended task.
-
-Then update `HANDOFF.md` with the current state and reproduction command.
+## Finish report
+Files changed and why; checks run with exact results; limitations/blockers; branch, commit, working-tree state; next recommended task.
