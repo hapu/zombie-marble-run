@@ -51,6 +51,7 @@ node tests/serve-bind.mjs
 node tests/med-pickup.mjs
 node tests/ability-reset.mjs
 node tests/obstacles.mjs
+node tests/row-drop.mjs
 node tests/zones.mjs
 node tests/render-effects.mjs
 node tests/physics-regressions.mjs

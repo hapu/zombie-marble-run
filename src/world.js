@@ -157,10 +157,8 @@ export function makeWorld(world, nz, seed, opts = {}) {
     // Walls (shared boundaries built once)
     for (const [y, k, on] of [[oy + CS, "b", 1], [oy, "t", cell.gy === 0]]) {
       if (on) {
-        // Vertical row transitions are open shafts so marbles drop cleanly
-        // into the next row instead of skimming a narrow slot at speed.
-        if (k === "b" && conn.b) continue;
         if (conn[k]) {
+          // Row transitions keep a central 104 px drop slot.
           hw(ox, ox + CS / 2 - 52, y);
           hw(ox + CS / 2 + 52, ox + CS, y);
         } else {
@@ -179,23 +177,44 @@ export function makeWorld(world, nz, seed, opts = {}) {
     }
 
     // Chunk-specific content
+    const dir = mir ? -1 : 1;
+    const bx = (localX) => ox + (mir ? CS - localX : localX);
+    let fullBelt = true;
     if (type === "S") {
       // Start: spawn marbles here
       S.gate = rect(world, ox + 292, oy + 180, 14, 344, 0, null, S.statics);
       S.zgate = rect(world, ox + 190, oy + 180, 14, 344, 0, null, S.statics);
     } else if (type === "F") {
       // Finish
-    } else if (type === "D2" || type === "U1") {
+    } else if (type === "D1") {
+      // Drop: converging belts feed the central row-transition slot.
+      S.zones.push({ t: "belt", x: bx(64), y: oy + CS - 45, w: 128, h: 90, f: 1.2, dir });
+      S.zones.push({ t: "belt", x: bx(296), y: oy + CS - 45, w: 128, h: 90, f: -1, dir });
+      if (obstacleRnd() < 0.5) {
+        staticCirc(world, bx(180), oy + 200, 16, "#ff5ea8", "bumper", S.statics);
+      } else {
+        staticCirc(world, bx(180), oy + 230, 20, "#9aa4bd", "peg", S.statics);
+      }
+      fullBelt = false;
+    } else if (type === "D2") {
+      // Landing: break the fall from the row above.
+      staticCirc(world, bx(150), oy + 170, 7, "#9aa4bd", "peg", S.statics);
+      staticCirc(world, bx(210), oy + 170, 7, "#9aa4bd", "peg", S.statics);
+    } else if (type === "U1") {
+      // Lift: converging belts feed the upward zone.
+      S.zones.push({ t: "belt", x: bx(64), y: oy + CS - 45, w: 128, h: 90, f: 1.2, dir });
+      S.zones.push({ t: "belt", x: bx(296), y: oy + CS - 45, w: 128, h: 90, f: -1, dir });
       // Lift acceleration exceeds gravity so marbles rise through the zone.
       S.zones.push({
         t: "lift",
         x: ox + 180,
         y: oy + 180,
-        w: 112,
+        w: 104,
         h: 344,
         ax: 0,
         ay: -12.5,
       });
+      fullBelt = false;
     } else if (type === "U2") {
       S.zones.push({
         t: "lift",
@@ -217,17 +236,20 @@ export function makeWorld(world, nz, seed, opts = {}) {
         dir: mir ? -1 : 1,
       });
     } else if (type === "H") {
-      const x = (localX) => ox + (mir ? CS - localX : localX);
       const layout = obstacleRnd();
       if (layout < 0.16) {
         for (let localX = 50; localX < 340; localX += 50) {
-          staticCirc(world, x(localX), oy + 300, 7, "#9aa4bd", "peg", S.statics);
+          staticCirc(world, bx(localX), oy + 300, 7, "#9aa4bd", "peg", S.statics);
         }
       } else if (layout < 0.28) {
-        staticCirc(world, x(180), oy + 255, 26, "#ff5ea8", "bumper", S.statics);
+        staticCirc(world, bx(180), oy + 255, 26, "#ff5ea8", "bumper", S.statics);
       } else if (layout < 0.4) {
-        staticCirc(world, x(110), oy + 240, 20, "#ff5ea8", "bumper", S.statics);
-        staticCirc(world, x(250), oy + 290, 20, "#ff5ea8", "bumper", S.statics);
+        staticCirc(world, bx(110), oy + 240, 20, "#ff5ea8", "bumper", S.statics);
+        staticCirc(world, bx(250), oy + 290, 20, "#ff5ea8", "bumper", S.statics);
+      } else if (layout < 0.52) {
+        for (let i = 0; i < 8; i++) {
+          staticCirc(world, bx(50 + i * 37), oy + 120 + i * 24, 7, "#9aa4bd", "peg", S.statics);
+        }
       }
 
       if (forceRnd() < 0.18) {
@@ -254,8 +276,10 @@ export function makeWorld(world, nz, seed, opts = {}) {
         });
       }
     }
-    // Belt zones (mirrored rows push the opposite way)
-    S.zones.push({ t: "belt", x: ox + CS / 2, y: oy + CS - 45, w: CS, h: 90, f: 1, dir: cell.mir ? -1 : 1 });
+    // Full-width belt for chunks without split belts (mirrored rows reverse it).
+    if (fullBelt) {
+      S.zones.push({ t: "belt", x: ox + CS / 2, y: oy + CS - 45, w: CS, h: 90, f: 1, dir });
+    }
   });
 
   return S;

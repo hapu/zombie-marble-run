@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Restored prototype Two's row-drop geometry and obstacle content in `src/world.js`.
+- Result: D1 drops now use two converging belts plus a seeded central bumper/peg, D2 landings use a full belt and two top pegs without the erroneous lift, U1 lifts use converging belts, transition walls keep a central 104 px drop slot, and H chunks add a diagonal peg layout. Added `tests/row-drop.mjs` and updated the zones/obstacles tests; full smoke passes.
+
+## 2026-11-21
 - Change or experiment: Rendered belt zones and weapon effects.
 - Result: Belts draw as animated dashed conveyor lines above each chunk floor; `S.shots` now records `simT` and recent shots fade over 0.14 s with melee/ranged styling. Added `tests/render-effects.mjs` with a mock 2D context and wired it into `tests/smoke.sh`.
 

@@ -12,9 +12,7 @@ let lift;
 try {
   const race = makeWorld(routeWorld, 0, "wind-lift-regression", { diff: "normal" });
   wind = race.zones.find(zone => zone.t === "wind");
-  lift = race.zones.find(zone => zone.t === "lift");
   assert.ok(wind, "seeded course should include a wind zone");
-  assert.ok(lift, "course should include a landing lift zone");
 } finally {
   routeWorld.free();
 }
@@ -32,6 +30,9 @@ try {
   );
   assert.ok(zone, "mirrored rooftop should include a wind zone");
   assert.equal(zone.x, cell.ox + race.CS - 255, "wind zone center should mirror with the chunk");
+
+  lift = race.zones.find(candidate => candidate.t === "lift");
+  assert.ok(lift, "upward route should include a lift zone");
 } finally {
   mirroredWorld.free();
 }

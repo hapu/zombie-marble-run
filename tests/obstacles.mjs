@@ -14,13 +14,15 @@ try {
   const race = makeWorld(world, 0, "obstacle-physics-0", { diff: "normal" });
   const pegs = race.statics.filter(obstacle => obstacle.kind === "peg");
   const bumpers = race.statics.filter(obstacle => obstacle.kind === "bumper");
+  const pegRows = new Map();
+  for (const peg of pegs) pegRows.set(peg.y, (pegRows.get(peg.y) || 0) + 1);
   assert.ok(
-    pegs.length >= 6 && pegs.length % 6 === 0,
-    "seeded track should include one or more six-peg sparse layouts",
+    [...pegRows.values()].some(count => count >= 6),
+    "seeded track should include a six-peg sparse layout",
   );
   assert.ok(bumpers.length >= 1, "seeded track should include a bumper");
 
-  const bumper = bumpers[0];
+  const bumper = bumpers.find(candidate => candidate.rad >= 20) || bumpers[0];
   const position = bumper.rb.translation();
   assert.ok(Math.abs(metersToPixels(position.x) - bumper.x) < 1e-3);
   assert.ok(Math.abs(metersToPixels(position.y) - bumper.y) < 1e-3);
