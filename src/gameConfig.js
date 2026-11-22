@@ -33,6 +33,6 @@ export const WEAPONS = [
 
 export const DIFFS = {
   easy: { zhp: 4, zf: 0.0002, zd: 5, n: 1 },
-  normal: { zhp: 5, zf: 0.00026, zd: 0.75, n: 1.25 },
-  hard: { zhp: 6, zf: 0.00032, zd: 2, n: 1.5 },
+  normal: { zhp: 5, zf: 0.0005, zd: 1, n: 2.0 },
+  hard: { zhp: 6, zf: 0.0006, zd: 0.5, n: 2.5 },
 };
