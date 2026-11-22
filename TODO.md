@@ -19,7 +19,7 @@ Keep small; one active task. Each item should be verifiable.
   - [x] Restore obstacles and row-drop geometry
 - [ ] Balance difficulty and race length
   - [x] Cap stalled races at 90 seconds and test the boundary
-  - [ ] Tune difficulty outcomes across repeatable race samples
+  - [x] Tune difficulty outcomes across repeatable race samples
 
 ## Next
 - [ ] Port remaining chunk families/content (obstacles, wind/lift, pickups)

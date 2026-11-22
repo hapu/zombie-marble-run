@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Balanced difficulty outcomes across repeatable race samples.
+- Result: Fixed normal `zd` bug (0.75 → 1, matching prototype's 3s intent). Tuned `DIFFS` in `src/gameConfig.js` via deterministic 3-seed sampling to hit targets: Easy ~95% human finish (14.3/15), Normal ~44% finish / 56% loss (6.7/15 finish, 1/15 infected), Hard ~2% finish / 98% loss (0.3/15 finish, 3/15 infected). Full smoke passes.
+
+## 2026-11-21
 - Change or experiment: Restored prototype Two's row-drop geometry and obstacle content in `src/world.js`.
 - Result: D1 drops now use two converging belts plus a seeded central bumper/peg, D2 landings use a full belt and two top pegs without the erroneous lift, U1 lifts use converging belts, transition walls keep a central 104 px drop slot, and H chunks add a diagonal peg layout. Added `tests/row-drop.mjs` and updated the zones/obstacles tests; full smoke passes.
 
