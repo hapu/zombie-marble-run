@@ -65,6 +65,8 @@ function runZone(zone, gravity) {
   const result = {
     position: marble.rb.translation(),
     velocity: marble.rb.linvel(),
+    userForce: marble.rb.userForce(),
+    mass: marble.rb.mass(),
     start,
   };
   world.free();
@@ -77,12 +79,20 @@ assert.ok(
   metersToPixels(windResult.position.x - windResult.start.x) > 45,
   "wind should move the marble more than 45 px in one second",
 );
+assert.ok(
+  Math.abs(Math.abs(windResult.userForce.x) - windResult.mass * Math.abs(wind.ax)) < 0.2,
+  "wind force should be reapplied each step, not accumulated",
+);
 
 const liftResult = runZone(lift, GRAVITY_MPS2);
 assert.ok(liftResult.velocity.y < -2.4, "lift should overcome SI gravity and accelerate upward");
 assert.ok(
   liftResult.position.y < liftResult.start.y - 1,
   "lift should raise the marble by more than one meter in one second",
+);
+assert.ok(
+  Math.abs(Math.abs(liftResult.userForce.y) - liftResult.mass * Math.abs(lift.ay)) < 0.2,
+  "lift force should be reapplied each step, not accumulated",
 );
 
 console.log("ok    seeded wind and lift SI motion");

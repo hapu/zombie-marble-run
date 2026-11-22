@@ -7,7 +7,6 @@ import { abilityStateTarget, abilityStateBoostUntil, abilityStateShieldUntil } f
 import { metersToPixels, pixelsToMeters } from "./physicsUnits.js";
 
 const VMAX = 190;
-const ZVMAX = 120;
 const ZACCEL = 260;
 const BELT_SPEED = 140;
 const HITCD = 0.7;
@@ -111,6 +110,10 @@ export function stepSim(world, S, dt) {
 
   const act = S.marbles.filter(m => !m.gone);
 
+  // Rapier forces persist across steps until cleared. Reset each step so
+  // zone/chase forces only apply while the marble is actually inside them.
+  for (const m of act) m.rb.resetForces(false);
+
   // Open the start gate when racing begins.
   if (S.gate) { removeStatic(world, S, S.gate); S.gate = null; }
 
@@ -210,7 +213,7 @@ export function stepSim(world, S, dt) {
   // Cap marble velocity
   for (const m of act) {
     const boosted = m === abilityStateTarget() && S.simT < abilityStateBoostUntil();
-    const vm = m.zombie ? ZVMAX * (m.zv || 1.2) : (boosted ? 300 : VMAX);
+    const vm = m.zombie ? VMAX * (m.zv || 1.2) : (boosted ? 300 : VMAX);
     const rawVelocity = m.rb.linvel();
     const v = {
       x: metersToPixels(rawVelocity.x),

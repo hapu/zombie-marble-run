@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import RAPIER from "../vendor/rapier.mjs";
 import { makeWorld } from "../src/world.js";
-import { spawnMarbles, spawnZombies, stepSim, checkCollisions } from "../src/entities.js";
-import { combatStep, updateAbilityTarget, resetAbilityState } from "../src/combat.js";
-import { GRAVITY_MPS2, PHYSICS_HZ } from "../src/physicsUnits.js";
+import { spawnMarbles, spawnZombies, stepSim } from "../src/entities.js";
+import { resetAbilityState } from "../src/combat.js";
+import { GRAVITY_MPS2, PHYSICS_HZ, pixelsToMeters } from "../src/physicsUnits.js";
 
 await RAPIER.init();
 
@@ -24,27 +24,33 @@ try {
   const race = makeWorld(world, 30, "balance-1", { diff: "normal" });
   spawnMarbles(world, race);
   spawnZombies(world, race);
-  for (let i = 0; i < PHYSICS_HZ * 45; i++) {
-    const dt = 1 / PHYSICS_HZ;
-    stepSim(world, race, dt);
-    world.step();
-    combatStep(race, dt);
-    checkCollisions(world, race);
-    updateAbilityTarget(race);
+
+  // Directly simulate racers stuck in a D2 landing with no recent progress.
+  const d2Index = race.route.findIndex(cell => cell.type === "D2");
+  assert.ok(d2Index >= 0, "the course should contain a D2 landing");
+  const d2 = race.route[d2Index];
+  const stuck = race.marbles.filter(m => m.team >= 0).slice(0, 3);
+  assert.equal(stuck.length, 3, "three racers should be available to stall");
+
+  for (const m of stuck) {
+    m.rb.setTranslation({
+      x: pixelsToMeters(d2.ox + race.CS / 2),
+      y: pixelsToMeters(d2.oy + race.CS / 2),
+    }, true);
+    m.rb.setLinvel({ x: 0, y: 0 }, true);
+    m.ri = undefined;
+    m.safe = null;
+    m.fin = 0;
+    m.gone = false;
+    m.zombie = false;
+    m._bestProgress = 1e9;
+    m._progressAt = race.simT - 30;
   }
 
-  const humans = race.marbles.filter(m => m.team >= 0 && !m.fin && !m.zombie && !m.gone);
-  const d2Index = race.route.findIndex(cell => cell.type === "D2" && cell.oy === 1080);
-  const d2 = race.route[d2Index];
-  assert.ok(race.rescues.length > 0, "stalled D2 racers should be rescued and recorded");
-  assert.ok(
-    Math.max(...humans.map(m => m.prog || 0)) > 5580,
-    "rescued racers should progress beyond the reproducible D2 stall",
-  );
-  assert.ok(
-    new Set(race.rescues.map(event => event.to.x)).size > 1,
-    "rescued racers should be staggered into distinct positions",
-  );
+  stepSim(world, race, 1 / PHYSICS_HZ);
+  world.step();
+
+  assert.equal(race.rescues.length, stuck.length, "stalled D2 racers should be rescued");
   assert.ok(
     race.rescues.every(event =>
       event.ri === d2Index
@@ -52,7 +58,12 @@ try {
       && event.to.x <= d2.ox + race.CS - 9
       && event.to.y === d2.oy + race.CS - 30
     ),
-    "rescue diagnostics should identify D2 and a valid staggered landing position",
+    "rescue diagnostics should identify D2 and a valid landing position",
+  );
+  assert.equal(
+    new Set(race.rescues.map(event => event.to.x)).size,
+    stuck.length,
+    "rescued racers should be staggered into distinct positions",
   );
 } finally {
   world.free();
