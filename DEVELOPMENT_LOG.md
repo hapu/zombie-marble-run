@@ -3,6 +3,10 @@
 Newest first, with ISO dates. Archive entries older than the last ~20 once this passes 3,000 words into a separate archive file.
 
 ## 2026-11-21
+- Change or experiment: Rendered belt zones and weapon effects.
+- Result: Belts draw as animated dashed conveyor lines above each chunk floor; `S.shots` now records `simT` and recent shots fade over 0.14 s with melee/ranged styling. Added `tests/render-effects.mjs` with a mock 2D context and wired it into `tests/smoke.sh`.
+
+## 2026-11-21
 - Change or experiment: Added headless physics regressions for the force-reset fix, belt behavior, and course containment.
 - Result: New `tests/physics-regressions.mjs` proves zone forces clear on exit, belts reach their configured speed and bleed momentum, and every body stays inside the 5x5 course through a seeded 30-second race. Wired into `tests/smoke.sh`; full smoke passes.
 

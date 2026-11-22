@@ -15,7 +15,7 @@ Keep small; one active task. Each item should be verifiable.
   - [x] Apply static wall materials and mirror U2 wind placement
   - [x] Rescue stalled D2 racers and record their landing positions
   - [x] Add broader headless physics assertions
-  - [ ] Render belts and weapon effects
+  - [x] Render belts and weapon effects
   - [ ] Restore obstacles and row-drop geometry
 - [ ] Balance difficulty and race length
   - [x] Cap stalled races at 90 seconds and test the boundary

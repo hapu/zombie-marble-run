@@ -80,6 +80,24 @@ export function draw(ctx, S, state, simT, width, height) {
     ctx.fillText(cell.name, cell.ox + 16, cell.oy + 32);
   }
 
+  // Draw belt surfaces as moving dashed lines
+  const now = S.simT ?? simT;
+  for (const z of S.zones || []) {
+    if (z.t !== "belt" || !inv(z.x, z.y, 200)) continue;
+    // Belt zones reach the chunk floor; keep the dashes above the 16 px wall.
+    const y = z.y + z.h / 2 - 14;
+    ctx.save();
+    ctx.setLineDash([8, 9]);
+    ctx.lineDashOffset = -now * 70 * z.dir * Math.sign(z.f || 1);
+    ctx.strokeStyle = "rgba(120,255,235,.55)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(z.x - z.w / 2, y);
+    ctx.lineTo(z.x + z.w / 2, y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   // Draw static walls/obstacles
   for (const b of S.statics) {
     if (!inv(b.x, b.y, 260)) continue;
@@ -144,6 +162,27 @@ export function draw(ctx, S, state, simT, width, height) {
       ctx.fillStyle = "#9be36b";
       ctx.fillRect(x - rr, y - rr - 6, rr * 2 * Math.max(0, m.zhp) / m.zmax, 2);
     }
+  }
+
+  // Draw recent weapon effects (fade out over 0.14 s)
+  for (const shot of S.shots || []) {
+    if (shot.t === undefined) continue;
+    const age = now - shot.t;
+    if (age < 0 || age >= 0.14) continue;
+    if (!inv((shot.x1 + shot.x2) / 2, (shot.y1 + shot.y2) / 2, 80)) continue;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - age / 0.14);
+    ctx.strokeStyle = shot.c;
+    ctx.lineWidth = shot.melee ? 4 : 2;
+    ctx.beginPath();
+    ctx.moveTo(shot.x1, shot.y1);
+    ctx.lineTo(shot.x2, shot.y2);
+    ctx.stroke();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(shot.x2, shot.y2, shot.melee ? 9 : 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 
   ctx.restore();

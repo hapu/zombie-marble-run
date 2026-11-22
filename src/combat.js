@@ -66,7 +66,7 @@ export function combatStep(S, dt) {
     const impulse = pixelsToMeters(h.w.kb * 4) * target.rb.mass();
     target.rb.applyImpulse({ x: dx / l * impulse, y: dy / l * impulse }, true);
 
-    S.shots.push({ x1: hx, y1: hy, x2: tx, y2: ty, c: TEAMS[h.team].c, melee: h.w.range < 60 });
+    S.shots.push({ x1: hx, y1: hy, x2: tx, y2: ty, c: TEAMS[h.team].c, melee: h.w.range < 60, t: S.simT });
 
     if (target.zhp <= 0) {
       target.gone = true;

@@ -52,6 +52,7 @@ node tests/med-pickup.mjs
 node tests/ability-reset.mjs
 node tests/obstacles.mjs
 node tests/zones.mjs
+node tests/render-effects.mjs
 node tests/physics-regressions.mjs
 node tests/race-time-limit.mjs
 node tests/d2-stall.mjs
